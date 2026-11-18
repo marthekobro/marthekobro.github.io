@@ -54,14 +54,14 @@ body.is-case .topnav .home { display: inline; }
 [tabindex="-1"]:focus { outline: none; }
 
 /* Forside: hode */
-.masthead { margin-top: 40px; border-top: 2px solid var(--fg); padding-top: 20px; row-gap: 20px; }
+.masthead { margin-top: 20px; border-top: 2px solid var(--fg); padding-top: 20px; row-gap: 20px; }
 .masthead h1 { grid-column: span 9; font-weight: 200; font-size: clamp(56px, 8.2vw, 104px); line-height: 0.95; letter-spacing: -0.035em; }
 .masthead .intro { grid-column: span 3; align-self: end; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.4; }
 .masthead .intro strong { font-weight: 500; }
 .masthead .intro span { color: var(--muted); }
 
 /* Prosjektindeks */
-.index { margin-top: 64px; scroll-margin-top: 24px; }
+.index { margin-top: 96px; scroll-margin-top: 24px; }
 .index .head { padding-bottom: 12px; border-bottom: 1px solid var(--fg); }
 .row { text-decoration: none; padding: 22px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
 .row .nr { grid-column: span 1; font-size: 15px; color: var(--subtle); }
@@ -95,7 +95,7 @@ body.is-case .topnav .home { display: inline; }
 .foot { margin-top: 96px; border-top: 2px solid var(--fg); padding: 16px 0 48px; display: flex; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
 
 /* Prosjektside */
-.case { padding-top: 40px; }
+.case { padding-top: 20px; }
 .case .crumbs { border-top: 2px solid var(--fg); padding-top: 14px; display: flex; justify-content: space-between; gap: 16px; }
 .case .crumbs a { text-decoration: none; color: var(--accent); }
 .case .crumbs a:hover { text-decoration: underline; text-underline-offset: 4px; }
@@ -130,7 +130,7 @@ body.is-case .foot { margin-top: 80px; }
 
 @media (max-width: 860px) {
   .masthead h1, .masthead .intro { grid-column: 1 / -1; }
-  .index { margin-top: 48px; }
+  .index { margin-top: 64px; }
   .index .head { display: none; }
   .row { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 4px; padding: 18px 0; }
   .row .nr { grid-column: 1; grid-row: 1; }
