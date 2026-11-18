@@ -71,6 +71,7 @@ body.is-case .topnav .home { display: inline; }
 .row { transition: background-color .15s ease, box-shadow .15s ease; }
 .row:hover, .row:focus-visible { background: var(--tint); box-shadow: -16px 0 0 var(--tint), 16px 0 0 var(--tint); }
 .row:hover .title, .row:focus-visible .title { color: var(--accent); }
+.index .head .cm { display: none; }
 .index .head .c1 { grid-column: span 1; } .index .head .c2 { grid-column: span 5; } .index .head .c3 { grid-column: span 4; } .index .head .c4 { grid-column: span 2; text-align: right; }
 .strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); margin-top: 56px; }
 .strip a { display: block; overflow: hidden; }
@@ -132,7 +133,9 @@ body.is-case .foot { margin-top: 80px; }
   .masthead h1, .masthead .intro { grid-column: 1 / -1; }
   .masthead .intro { margin-top: 20px; }
   .index { margin-top: 64px; }
-  .index .head { display: none; }
+  .index .head { display: block; }
+  .index .head .c1, .index .head .c2, .index .head .c3, .index .head .c4 { display: none; }
+  .index .head .cm { display: inline; }
   .row { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 4px; padding: 18px 0; }
   .row .nr { grid-column: 1; grid-row: 1; }
   .row .title { grid-column: 2 / span 2; grid-row: 1; }
@@ -178,7 +181,7 @@ body.is-case .foot { margin-top: 80px; }
 
   <section class="index" id="prosjekter" aria-labelledby="prosjekter-tittel">
     <h2 class="visually-hidden" id="prosjekter-tittel" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Prosjekter</h2>
-    <div class="head grid label" aria-hidden="true"><span class="c1">Nr.</span><span class="c2">Prosjekt</span><span class="c3">Fokus</span><span class="c4">År</span></div>
+    <div class="head grid label" aria-hidden="true"><span class="c1">Nr.</span><span class="c2">Prosjekt</span><span class="c3">Fokus</span><span class="c4">År</span><span class="cm">Prosjekter</span></div>
       <a class="row grid" href="#studio"><span class="nr">01</span><span class="title">Impact Startup: Studio</span><span class="focus">Workshop, konsept, skjema</span><span class="yr">2023</span></a>
       <a class="row grid" href="#aidn"><span class="nr">02</span><span class="title">Aidn</span><span class="focus">Nytt journalsystem fra bunnen</span><span class="yr">2021–22</span></a>
       <a class="row grid" href="#forsikring"><span class="nr">03</span><span class="title">Forsikringsselskap</span><span class="focus">Automatisering og saksbehandling</span><span class="yr">2018–21</span></a>
