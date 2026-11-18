@@ -18,6 +18,7 @@
   --subtle: #6b6b6b;
   --line: #dddddd;
   --well: #f2f2f2;
+  --tint: #fbecf2;
   --accent: #b8336a;
   --pad: clamp(16px, 5vw, 64px);
   --gap: 24px;
@@ -67,6 +68,8 @@ body.is-case .topnav .home { display: inline; }
 .row .title { grid-column: span 5; font-size: clamp(26px, 2.7vw, 34px); font-weight: 300; line-height: 1.2; }
 .row .focus { grid-column: span 4; font-size: 16px; color: var(--muted); }
 .row .yr { grid-column: span 2; text-align: right; font-size: 15px; }
+.row { transition: background-color .15s ease, box-shadow .15s ease; }
+.row:hover, .row:focus-visible { background: var(--tint); box-shadow: -16px 0 0 var(--tint), 16px 0 0 var(--tint); }
 .row:hover .title, .row:focus-visible .title { color: var(--accent); }
 .index .head .c1 { grid-column: span 1; } .index .head .c2 { grid-column: span 5; } .index .head .c3 { grid-column: span 4; } .index .head .c4 { grid-column: span 2; text-align: right; }
 .strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); margin-top: 56px; }
