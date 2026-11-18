@@ -1,0 +1,425 @@
+/*
+ * Marthe Trygg Kobro – portfolio stylesheet
+ *
+ * One stylesheet for the whole site. Sections, in order:
+ *   1. Design tokens (colours, spacing)
+ *   2. Base and shared utilities
+ *   3. Top navigation
+ *   4. Home: masthead, project index, image strip
+ *   5. Home: About, Experience and Education
+ *   6. Case pages (one per project)
+ *   7. Footer
+ *   8. Small screens (max-width: 860px)
+ *
+ * Layout uses a 12-column grid (.grid). Desktop values are written first;
+ * everything for phones and small tablets lives in section 8.
+ *
+ * Note: this file was written with AI assistance (Claude, by Anthropic).
+ */
+
+
+/* 1. Design tokens --------------------------------------------------------
+ * Change colours here, not further down. All text colours meet WCAG AA
+ * (4.5:1) against both --bg and --tint.
+ */
+:root {
+  --bg: #ffffff;        /* page background */
+  --fg: #111111;        /* headings and strong rules */
+  --text: #333333;      /* body copy */
+  --muted: #555555;     /* secondary text */
+  --subtle: #6b6b6b;    /* tertiary text: numbers, labels in fact lists */
+  --line: #dddddd;      /* thin dividers between rows */
+  --well: #f2f2f2;      /* grey box behind screenshots */
+  --tint: #fef9fb;      /* hover background on project rows */
+  --accent: #b8336a;    /* pink accent: labels, links, hover (5.65:1 on white) */
+
+  --pad: clamp(16px, 5vw, 64px);  /* page side padding */
+  --gap: 24px;                    /* grid gutter */
+
+  color-scheme: light;
+}
+
+
+/* 2. Base and shared utilities ------------------------------------------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, figure { margin: 0; }
+a { color: inherit; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+img { display: block; max-width: 100%; height: auto; }
+
+/* Headings get focus from the router (js/main.js); no ring needed there. */
+[tabindex="-1"]:focus { outline: none; }
+
+/* Centred page column with safe-area aware side padding. */
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: max(var(--pad), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--pad), env(safe-area-inset-right, 0px));
+}
+
+/* 12-column grid used by most sections. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+
+/* Small pink uppercase label, used for section headings and pager labels. */
+.label {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* Section heading row: label with a dark rule underneath. */
+.head {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--fg);
+}
+
+/* Hidden visually, still read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* "Skip to content" link, visible only on keyboard focus. */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 20;
+  padding: 8px 12px;
+  background: var(--fg);
+  color: #ffffff;
+}
+.skip:focus { left: 8px; }
+
+
+/* 3. Top navigation ------------------------------------------------------ */
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 32px;
+  font-size: 15px;
+}
+.topnav a { text-decoration: none; }
+.topnav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.topnav .links { display: flex; gap: clamp(16px, 3vw, 28px); margin-left: auto; }
+.topnav .links a { white-space: nowrap; }
+
+/* The name link in the menu is only shown on case pages. */
+.topnav .home { display: none; }
+body.is-case .topnav .home { display: inline; }
+
+
+/* 4. Home: masthead, project index, image strip -------------------------- */
+.masthead {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--fg);
+  row-gap: 20px;
+}
+.masthead h1 {
+  grid-column: span 9;
+  font-weight: 200;
+  font-size: clamp(56px, 8.2vw, 104px);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+.masthead .intro {
+  grid-column: span 3;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.masthead .intro strong { font-weight: 500; }
+.masthead .intro span { color: var(--muted); }
+
+/* Project index: one linked row per project. */
+.index { margin-top: 96px; scroll-margin-top: 24px; }
+
+/* Column titles on desktop (Nr. / Prosjekt / Fokus / År).
+ * On small screens these are swapped for a single "Prosjekter" title. */
+.index .head .col-nr    { grid-column: span 1; }
+.index .head .col-title { grid-column: span 5; }
+.index .head .col-focus { grid-column: span 4; }
+.index .head .col-year  { grid-column: span 2; text-align: right; }
+.index .head .col-mobile { display: none; }
+
+.row {
+  align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  transition: background-color .15s ease, box-shadow .15s ease;
+}
+.row .nr    { grid-column: span 1; font-size: 15px; color: var(--subtle); }
+.row .title { grid-column: span 5; font-size: clamp(26px, 2.7vw, 34px); font-weight: 300; line-height: 1.2; }
+.row .focus { grid-column: span 4; font-size: 16px; color: var(--muted); }
+.row .yr    { grid-column: span 2; font-size: 15px; text-align: right; }
+
+/* Hover: pale pink background that bleeds 16px past the text on each side. */
+.row:hover,
+.row:focus-visible {
+  background: var(--tint);
+  box-shadow: -16px 0 0 var(--tint), 16px 0 0 var(--tint);
+}
+.row:hover .title,
+.row:focus-visible .title { color: var(--accent); }
+
+/* Three images under the index, each linking to its project. */
+.strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+  margin-top: 56px;
+}
+.strip a { display: block; overflow: hidden; }
+.strip img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .5s ease; }
+.strip a:hover img { transform: scale(1.03); }
+
+
+/* 5. Home: About, Experience and Education ------------------------------ */
+.block { margin-top: 96px; scroll-margin-top: 24px; }
+
+.about { margin-top: 32px; }
+.about .kicker {
+  grid-column: 2 / span 4;
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.about .body {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: var(--text);
+}
+
+/* Experience and Education lists: When | What | Where. */
+.list ol,
+.list ul { list-style: none; margin: 0; padding: 0; }
+.list .head,
+.list .item {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 520px) minmax(0, 1fr);
+  column-gap: var(--gap);
+}
+.list .item { align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.list .when  { font-size: 15px; color: var(--subtle); font-variant-numeric: tabular-nums; }
+.list .what  { font-size: 26px; font-weight: 300; line-height: 1.25; }
+.list .where { font-size: 19px; color: var(--muted); line-height: 1.35; }
+.list.small .what { font-size: 22px; }
+
+
+/* 6. Case pages ---------------------------------------------------------- */
+.case { padding-top: 20px; }
+
+/* "← Portefølje   03 / 07" row at the top. */
+.case .crumbs {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 2px solid var(--fg);
+}
+.case .crumbs a { color: var(--accent); text-decoration: none; }
+.case .crumbs a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+.case h1 {
+  margin-top: 40px;
+  font-weight: 200;
+  font-size: clamp(44px, 7.5vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.case .lead {
+  max-width: 760px;
+  margin-top: 20px;
+  font-size: clamp(19px, 1.8vw, 22px);
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--text);
+}
+.case .hero { margin-top: 48px; }
+.case .hero img { width: 100%; }
+
+/* Facts (left) and story text (right). */
+.facts { margin-top: 72px; align-items: start; row-gap: 40px; }
+.facts dl {
+  grid-column: span 5;
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--fg);
+}
+.facts dl div {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.facts dt { color: var(--subtle); }
+.facts dd { margin: 0; }
+.facts .story {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-top: 24px;
+  border-top: 1px solid var(--fg);
+  font-size: 19px;
+  line-height: 1.6;
+  color: #222222;
+}
+
+/* A "part" is one labelled section of images plus a caption. */
+.part { display: flex; flex-direction: column; gap: 24px; margin-top: 72px; }
+.part .cap { max-width: 560px; font-size: 16px; line-height: 1.4; color: var(--muted); }
+
+/* Image layouts used inside parts: */
+.part .tiles {                 /* 2×N grid of screenshots on grey boxes */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap);
+}
+.part .tiles div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--well);
+}
+.part .tiles img { max-height: 100%; width: auto; }
+.part .pair {                  /* two images side by side */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+.part .narrow      { max-width: 1000px; }  /* single image, limited width */
+.part .mid         { max-width: 880px; }
+.part .narrowsmall { max-width: 420px; }   /* phone screenshots */
+.part .scroll      { overflow-x: auto; -webkit-overflow-scrolling: touch; }  /* wide diagram, scrolls sideways on phones */
+.part .scroll img  { min-width: 900px; }
+
+/* Previous / next project at the bottom of each case. */
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  align-items: end;
+  margin-top: 96px;
+}
+.pager a { display: flex; flex-direction: column; gap: 8px; text-decoration: none; }
+.pager a.next { align-items: flex-end; text-align: right; }
+.pager .t { font-size: clamp(24px, 2.6vw, 32px); font-weight: 300; line-height: 1.15; }
+.pager a:hover .t { color: var(--accent); }
+
+
+/* 7. Footer -------------------------------------------------------------- */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 96px;
+  padding: 16px 0 48px;
+  border-top: 2px solid var(--fg);
+  font-size: 14px;
+  color: var(--muted);
+}
+body.is-case .foot { margin-top: 80px; }
+
+
+/* 8. Small screens ------------------------------------------------------- */
+@media (max-width: 860px) {
+  /* Home: masthead stacks */
+  .masthead h1,
+  .masthead .intro { grid-column: 1 / -1; }
+  .masthead .intro { margin-top: 20px; }
+
+  /* Home: project index shows one "Prosjekter" title instead of columns */
+  .index { margin-top: 64px; }
+  .index .head { display: block; }
+  .index .head .col-nr,
+  .index .head .col-title,
+  .index .head .col-focus,
+  .index .head .col-year { display: none; }
+  .index .head .col-mobile { display: inline; }
+
+  /* Home: each row becomes  nr | title  /  focus | year */
+  .row { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 4px; padding: 18px 0; }
+  .row .nr    { grid-column: 1; grid-row: 1; }
+  .row .title { grid-column: 2 / span 2; grid-row: 1; }
+  .row .focus { grid-column: 2; grid-row: 2; font-size: 15px; }
+  .row .yr    { grid-column: 3; grid-row: 2; }
+
+  /* Home: only the first strip image */
+  .strip { grid-template-columns: minmax(0, 1fr); }
+  .strip a:nth-child(n+2) { display: none; }
+
+  /* Home: About, Experience, Education */
+  .block { margin-top: 72px; }
+  .about .kicker,
+  .about .body { grid-column: 1 / -1; }
+  .about .kicker { padding-left: 40px; }  /* lines up with project titles */
+  .about .body { margin-top: 20px; }
+  .list .head { display: block; }
+  .list .head span:first-child { display: none; }  /* hide "Når" */
+  .list .item { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+  .list .what { font-size: 22px; }
+  .list.small .what { font-size: 20px; }
+  .list .where { font-size: 17px; }
+
+  /* Case pages */
+  .facts dl,
+  .facts .story { grid-column: 1 / -1; }
+  .facts dl div { grid-template-columns: 100px minmax(0, 1fr); }
+  .facts .story { padding-top: 0; border-top: 0; font-size: 18px; }  /* fewer rules on phones */
+  .part { margin-top: 56px; }
+  .part .tiles,
+  .part .pair { grid-template-columns: minmax(0, 1fr); }
+  .pager { grid-template-columns: minmax(0, 1fr); }
+  .pager a.next { align-items: flex-start; text-align: left; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .row,
+  .strip img { transition: none; }
+}

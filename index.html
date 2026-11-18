@@ -1,225 +1,64 @@
 <!doctype html>
+<!--
+  Marthe Trygg Kobro – portfolio
+  https://marthekobro.github.io
+
+  Everything is on this one page:
+    - #view-home              the home page (masthead, project index, About, Experience)
+    - #view-<project>         one <article> per project, hidden until its link is opened
+  js/main.js shows the right block based on the URL hash (#studio, #aidn, ...).
+  css/style.css holds all styling; colours are defined at the top of that file.
+  Images live in img/. See README.md for how to edit and publish.
+
+  Note: this site was built with AI assistance (Claude, by Anthropic).
+-->
 <html lang="nb">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Marthe Trygg Kobro</title>
+<title>Marthe Trygg Kobro – Portefølje</title>
 <meta name="description" content="Portefølje for Marthe Trygg Kobro, senior interaksjonsdesigner.">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&display=swap">
-<style>
-/* Layout: porteføljens egen mørke flate fra Figma. Toppstripe, stor tittel med navn til høyre, rutenett med prosjektfliser, og en egen visning per prosjekt. */
-:root {
-  --bg: #0b0b0b;
-  --surface: #161616;
-  --fg: #ffffff;
-  --muted: rgba(255, 255, 255, 0.72);
-  --line: rgba(255, 255, 255, 0.22);
-  --yellow: #e8e5a9;
-  --mint: #d0f8de;
-  --font-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
-  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
-  --wrap: 1352px;
-  color-scheme: dark;
-}
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body {
-  background: var(--bg); color: var(--fg);
-  font-family: var(--font-body); font-size: 18px; line-height: 1.45;
-  -webkit-font-smoothing: antialiased;
-}
-body::before {
-  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
-  z-index: 10; background: var(--bg);
-}
-a { color: inherit; }
-a:focus-visible { outline: 2px solid var(--mint); outline-offset: 4px; }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 700; margin: 0; text-wrap: balance; line-height: 1.05; }
-p { margin: 0; }
-img { display: block; max-width: 100%; height: auto; }
-
-.wrap {
-  max-width: calc(var(--wrap) + 88px); margin: 0 auto;
-  padding-left: max(16px, min(44px, 4vw), env(safe-area-inset-left, 0px));
-  padding-right: max(16px, min(44px, 4vw), env(safe-area-inset-right, 0px));
-}
-
-/* Toppstripe */
-.topbar {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
-  background: var(--bg); border-bottom: 1px solid var(--line);
-}
-.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 69px; }
-.topbar .home { font-size: 15px; text-decoration: none; }
-.topbar nav { display: flex; gap: clamp(14px, 3vw, 32px); font-size: 15px; }
-.topbar nav a { text-decoration: none; color: var(--muted); }
-.topbar nav a:hover { color: var(--fg); }
-
-/* Forside: hode */
-.masthead { border-bottom: 1px solid var(--line); }
-.masthead .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
-.masthead .title { padding-block: 72px 48px; display: grid; gap: 28px; padding-right: 32px; min-width: 0; }
-.masthead h1 { font-size: clamp(56px, 9vw, 90px); letter-spacing: -0.01em; }
-.masthead .ingress { font-size: clamp(19px, 2vw, 24px); font-weight: 500; max-width: 664px; line-height: 1.3; }
-.masthead .name {
-  border-left: 1px solid var(--line); padding-left: clamp(20px, 3vw, 32px);
-  display: flex; align-items: flex-end; padding-bottom: 48px;
-  font-family: var(--font-display); font-weight: 700; font-size: 40px; line-height: 1; text-align: right;
-}
-.masthead .name span { display: block; }
-.y { color: var(--yellow); }
-.m { color: var(--mint); }
-
-/* Prosjektfliser */
-.section { padding-block: 80px; scroll-margin-top: 70px; }
-.section + .section { border-top: 1px solid var(--line); }
-.section-label { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
-.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 24px; }
-.tile { text-decoration: none; display: grid; gap: 14px; }
-.tile .pic { aspect-ratio: 664 / 374; overflow: hidden; background: var(--surface); }
-.tile .pic img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-.tile:hover .pic img { transform: scale(1.03); }
-.tile h3 { font-family: var(--font-body); font-weight: 700; font-size: 21px; line-height: 1.4; }
-.tile p { color: var(--muted); }
-.tile:hover h3 { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-@media (prefers-reduced-motion: reduce) { .tile .pic img { transition: none; } }
-
-/* Om meg og erfaring */
-.two { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; }
-.two h2 { font-size: clamp(36px, 5vw, 64px); }
-.about { display: grid; gap: 20px; font-size: 20px; line-height: 1.5; max-width: 749px; }
-.about p:first-child { font-size: clamp(20px, 2vw, 24px); font-weight: 500; line-height: 1.35; }
-.cv { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--line); }
-.cv li {
-  display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 16px;
-  padding-block: 14px; border-bottom: 1px solid var(--line);
-}
-.cv .years { color: var(--muted); font-variant-numeric: tabular-nums; }
-.cv .where { color: var(--muted); }
-.edu { margin-top: 40px; display: grid; gap: 10px; }
-.edu h3 { font-family: var(--font-body); font-size: 15px; font-weight: 400; color: var(--muted); }
-.edu ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
-
-.foot { border-top: 1px solid var(--line); }
-.foot .wrap { display: flex; justify-content: space-between; gap: 16px; padding-block: 18px 28px; font-size: 13px; color: var(--muted); }
-.foot strong { font-family: var(--font-display); color: var(--fg); }
-
-/* Prosjektvisning */
-.case { padding-block: 72px 80px; }
-.case h1 { font-size: clamp(44px, 6.5vw, 64px); }
-.case .lead { font-size: clamp(19px, 2vw, 24px); font-weight: 500; max-width: 664px; margin-top: 20px; line-height: 1.3; }
-.case .hero { margin-top: 40px; }
-.case .hero img, .shot img { width: 100%; }
-.facts { display: grid; grid-template-columns: minmax(0, 491px) minmax(0, 749px); justify-content: space-between; gap: 32px 48px; margin-block: 56px; }
-.facts dl { margin: 0; border-top: 2px solid var(--line); border-bottom: 2px solid var(--line); padding-block: 20px; display: grid; gap: 22px; align-self: start; }
-.facts dl div { display: grid; grid-template-columns: 172px minmax(0, 1fr); gap: 12px; }
-.facts dt { color: var(--muted); }
-.facts dd { margin: 0; }
-.facts .story { display: grid; gap: 1.2em; font-size: clamp(19px, 2vw, 24px); font-weight: 500; line-height: 1.35; }
-.gallery { display: grid; gap: 56px; }
-.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-figure { margin: 0; display: grid; gap: 14px; align-content: start; }
-figcaption { font-size: 16px; line-height: 1.45; max-width: 664px; }
-.scroll { overflow-x: auto; }
-.scroll img { min-width: 900px; }
-.narrow { max-width: 1180px; }
-.mid { max-width: 1008px; }
-.back { display: inline-flex; align-items: center; gap: 10px; margin-top: 64px; font-size: 15px; text-decoration: none; padding: 8px 0; }
-.back:hover span { text-decoration: underline; text-underline-offset: 4px; }
-.next { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 24px; display: flex; justify-content: space-between; gap: 16px; font-size: 15px; color: var(--muted); }
-.next a { color: var(--fg); font-family: var(--font-display); font-size: 24px; text-decoration: none; }
-.next a:hover { text-decoration: underline; text-underline-offset: 4px; }
-
-@media (max-width: 860px) {
-  .masthead .wrap { grid-template-columns: minmax(0, 1fr); }
-  .masthead .title { padding-right: 0; padding-bottom: 28px; }
-  .masthead .name { border-left: 0; padding-left: 0; padding-bottom: 40px; justify-content: flex-start; text-align: left; font-size: 32px; }
-  .masthead .name span { display: inline; }
-  .tiles, .pair, .two, .facts { grid-template-columns: minmax(0, 1fr); }
-  .tiles { gap: 40px; }
-  .section { padding-block: 56px; }
-  .facts dl div { grid-template-columns: 110px minmax(0, 1fr); }
-  .cv li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-  .topbar nav .opt { display: none; }
-}
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@200;300;400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<header class="topbar">
-  <div class="wrap">
-    <a class="home" href="#">Portefølje</a>
-    <nav aria-label="Hovedmeny">
-      <a href="#prosjekter">Prosjekter</a>
-      <a href="#om-meg">Om meg</a>
-      <a class="opt" href="#erfaring">Erfaring</a>
-    </nav>
-  </div>
+<a class="skip" href="#innhold">Hopp til innhold</a>
+<header class="wrap">
+  <nav class="topnav" aria-label="Hovedmeny">
+    <a class="home" href="#">Marthe Trygg Kobro</a>
+    <div class="links"><a href="#prosjekter">Prosjekter</a><a href="#om-meg">Om meg</a><a href="#erfaring">Erfaring</a></div>
+  </nav>
 </header>
 
-<main>
+<main id="innhold">
 <!-- ============ FORSIDE ============ -->
-<div id="view-home">
-  <section class="masthead">
-    <div class="wrap">
-      <div class="title">
-        <h1>Portefølje</h1>
-        <p class="ingress">Her er noen arbeidseksempler fra produkter og nettsider det har vært ekstra gøy å jobbe med. Det kan bety at vi har jobbet bra som et team, at jeg har lært mye nytt, eller at jeg opplever at arbeidet har gjort en forskjell.</p>
-      </div>
-      <div class="name" aria-label="Marthe Trygg Kobro"><div><span class="y">Marthe</span> <span class="m">Trygg</span> <span>Kobro</span></div></div>
-    </div>
-  </section>
+<div id="view-home" class="wrap">
+  <div class="masthead grid">
+    <h1>Marthe<br>Trygg Kobro</h1>
+    <p class="intro"><strong>Portefølje</strong><span>Her er prosjekter jeg er stolt av, enten fordi vi lærte mye, jobbet bra som team eller utgjorde en forskjell.</span></p>
+  </div>
 
-  <section class="section" id="prosjekter">
-    <div class="wrap">
-      <h2 class="section-label">Utvalgte prosjekter</h2>
-      <div class="tiles">
-        <a class="tile" href="#forsikring">
-          <div class="pic"><img src="img/fors-hero.jpg" alt="" loading="lazy"></div>
-          <h3>Forsikringsselskap</h3>
-          <p>Automatisering, brukervennlighet, saksbehandling</p>
-        </a>
-        <a class="tile" href="#studio">
-          <div class="pic"><img src="img/studio-hero.jpg" alt=""></div>
-          <h3>Impact Startup: Studio</h3>
-          <p>Et digitalt produkt for startups</p>
-        </a>
-        <a class="tile" href="#postbud">
-          <div class="pic"><img src="img/post-hero.jpg" alt="" loading="lazy"></div>
-          <h3>Postbudhjelp</h3>
-          <p>Tilgjengeliggjøring av informasjon når man er på farten</p>
-        </a>
-        <a class="tile" href="#motione">
-          <div class="pic"><img src="img/moti-hero.jpg" alt="" loading="lazy"></div>
-          <h3>MotiOne</h3>
-          <p>Plattform for å øke aktiviteten blant ansatte</p>
-        </a>
-        <a class="tile" href="#aidn">
-          <div class="pic"><img src="img/aidn-oversikt.jpg" alt="" loading="lazy"></div>
-          <h3>Aidn</h3>
-          <p>Helt ny løsning for dokumentasjon og samarbeid i helsevesenet</p>
-        </a>
-        <a class="tile" href="#aldring-og-helse">
-          <div class="pic"><img src="img/ah-hero.jpg" alt="" loading="lazy"></div>
-          <h3>Aldring og helse</h3>
-          <p>Nye nettsider og prosessledelse</p>
-        </a>
-        <a class="tile" href="#daman">
-          <div class="pic"><img src="img/daman-hero.jpg" alt="" loading="lazy"></div>
-          <h3>Daman Health</h3>
-          <p>Å få innbyggere til å velge å bruke allmennlege</p>
-        </a>
-      </div>
-    </div>
+  <section class="index" id="prosjekter" aria-labelledby="prosjekter-tittel">
+    <h2 class="visually-hidden" id="prosjekter-tittel">Prosjekter</h2>
+    <div class="head grid label" aria-hidden="true"><span class="col-nr">Nr.</span><span class="col-title">Prosjekt</span><span class="col-focus">Fokus</span><span class="col-year">År</span><span class="col-mobile">Prosjekter</span></div>
+    <a class="row grid" href="#studio"><span class="nr">01</span><span class="title">Impact Startup: Studio</span><span class="focus">Workshop, konsept, skjema</span><span class="yr">2023</span></a>
+    <a class="row grid" href="#aidn"><span class="nr">02</span><span class="title">Aidn</span><span class="focus">Nytt journalsystem fra bunnen</span><span class="yr">2021–22</span></a>
+    <a class="row grid" href="#forsikring"><span class="nr">03</span><span class="title">Forsikringsselskap</span><span class="focus">Automatisering og saksbehandling</span><span class="yr">2018–21</span></a>
+    <a class="row grid" href="#aldring-og-helse"><span class="nr">04</span><span class="title">Aldring og helse</span><span class="focus">Nettsider og prosessledelse</span><span class="yr">2018</span></a>
+    <a class="row grid" href="#motione"><span class="nr">05</span><span class="title">MotiOne</span><span class="focus">Navigasjon, struktur, UI</span><span class="yr">2017–18</span></a>
+    <a class="row grid" href="#daman"><span class="nr">06</span><span class="title">Daman Health</span><span class="focus">App for å velge allmennlege</span><span class="yr">2017</span></a>
+    <a class="row grid" href="#postbud"><span class="nr">07</span><span class="title">Postbudhjelp</span><span class="focus">Informasjonsarkitektur og språk</span><span class="yr">2016</span></a>
   </section>
+  <div class="strip"><a href="#studio" aria-label="Impact Startup: Studio"><img src="img/studio-hero.jpg" alt="" loading="lazy"></a><a href="#aidn" aria-label="Aidn"><img src="img/aidn-oversikt.jpg" alt="" loading="lazy"></a><a href="#forsikring" aria-label="Forsikringsselskap"><img src="img/fors-hero.jpg" alt="" loading="lazy"></a></div>
 
-  <section class="section" id="om-meg">
-    <div class="wrap two">
-      <h2>Om meg</h2>
-      <div class="about">
+  <section class="block" id="om-meg" aria-labelledby="om-meg-tittel">
+    <h2 class="head label" id="om-meg-tittel">Om meg</h2>
+    <div class="about grid">
+      <p class="kicker">Industridesigner, med et hjerte for det digitale.</p>
+      <div class="body">
         <p>Jeg er utdannet industridesigner, med et hjerte for det digitale. I over ti år har jeg jobbet med interaksjonsdesign for nettsider, apper og fagsystemer, i bransjer som forsikring, logistikk, helse og offentlig sektor. Underveis har jeg vært både konsulent og in-house, i startups og store virksomheter, og ofte hatt flere roller på en gang, som designlead, faglig leder og produkteier.</p>
         <p>Jeg trives best når jeg får lage løsninger som faktisk funker, i samspillet mellom brukere, teknologi og forretning. Gjerne komplekse løsninger, der mange hensyn skal balanseres og svaret ikke er gitt. Det som engasjerer meg mest, er hvordan folk orienterer seg, finner frem og tar beslutninger, og hvordan en struktur kan være fleksibel nok til å levere ny verdi raskt uten at helheten forvitrer.</p>
         <p>I praksis betyr det tett kontakt med brukerne, mye testing og forbedring i små steg. Jeg er ivrig, grundig og detaljorientert, og gjør det som trengs for at produktet kommer videre, enten det er å finne retningen eller å brette opp ermene og produsere.</p>
@@ -227,308 +66,205 @@ figcaption { font-size: 16px; line-height: 1.45; max-width: 664px; }
     </div>
   </section>
 
-  <section class="section" id="erfaring">
-    <div class="wrap two">
-      <h2>Erfaring</h2>
-      <div>
-        <ol class="cv">
-          <li><span class="years">2024–i dag</span><span>Senior produktdesigner <span class="where">· Deepinsight</span></span></li>
-          <li><span class="years">2021–2024</span><span>Senior interaksjonsdesigner <span class="where">· Behalf (produktstudio)</span></span></li>
-          <li><span class="years">2018–2021</span><span>Faglig leder og senior interaksjonsdesigner <span class="where">· Itera</span></span></li>
-          <li><span class="years">2017–2018</span><span>UX-designer <span class="where">· Zeppelin</span></span></li>
-          <li><span class="years">2015–2017</span><span>UX-designer <span class="where">· Posten Bring</span></span></li>
-          <li><span class="years">2014–2015</span><span>Interaksjonsdesigner <span class="where">· Visma Consulting</span></span></li>
-        </ol>
-        <div class="edu">
-          <h3>Utdanning og kurs</h3>
-          <ul>
-            <li>Master i industridesign, NTNU, 2014</li>
-            <li>UX Certificate, Nielsen Norman Group, 2020</li>
-            <li>Elements of AI, Universitetet i Helsinki og NTNU, 2020</li>
-            <li>Universell utforming av IKT, Difi, 2015</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+  <section class="block list" id="erfaring" aria-labelledby="erfaring-tittel">
+    <h2 class="head label"><span aria-hidden="true">Når</span><span id="erfaring-tittel">Erfaring</span></h2>
+    <ol>
+      <li class="item"><span class="when">2024–i dag</span><span class="what">Senior produktdesigner</span><span class="where">Deepinsight</span></li>
+      <li class="item"><span class="when">2021–2024</span><span class="what">Senior interaksjonsdesigner</span><span class="where">Behalf (produktstudio)</span></li>
+      <li class="item"><span class="when">2018–2021</span><span class="what">Faglig leder og senior interaksjonsdesigner</span><span class="where">Itera</span></li>
+      <li class="item"><span class="when">2017–2018</span><span class="what">UX-designer</span><span class="where">Zeppelin</span></li>
+      <li class="item"><span class="when">2015–2017</span><span class="what">UX-designer</span><span class="where">Posten Bring</span></li>
+      <li class="item"><span class="when">2014–2015</span><span class="what">Interaksjonsdesigner</span><span class="where">Visma Consulting</span></li>
+    </ol>
+  </section>
+
+  <section class="block list small" aria-labelledby="utdanning-tittel">
+    <h2 class="head label"><span aria-hidden="true">Når</span><span id="utdanning-tittel">Utdanning og kurs</span></h2>
+    <ul>
+      <li class="item"><span class="when">2020</span><span class="what">UX Certificate</span><span class="where">Nielsen Norman Group</span></li>
+      <li class="item"><span class="when">2020</span><span class="what">Elements of AI</span><span class="where">Universitetet i Helsinki og NTNU</span></li>
+      <li class="item"><span class="when">2015</span><span class="what">Universell utforming av IKT</span><span class="where">Difi</span></li>
+      <li class="item"><span class="when">2014</span><span class="what">Master i industridesign</span><span class="where">NTNU</span></li>
+    </ul>
   </section>
 </div>
 
-<!-- ============ FORSIKRINGSSELSKAP ============ -->
-<article class="case wrap" id="view-forsikring" hidden>
-  <h1>Forsikringsselskap</h1>
-  <p class="lead">Digitalisering, automatisering, designsystem og samarbeid på tvers av språk og land.</p>
-  <figure class="hero"><img src="img/fors-hero.jpg" alt="Brukertest over video, der en testdeltaker går gjennom en prototype for oppfølging av skadesak på mobil." loading="lazy"></figure>
-  <div class="facts">
-    <dl>
-      <div><dt>Rolle</dt><dd>Senior og lead interaksjonsdesigner</dd></div>
-      <div><dt>Ansvar</dt><dd>Planlegge og organisere designarbeid. Fagansvarlig på tvers av team. Levere mot produktteam og jobbe tett med forretning, prosess og produkt.</dd></div>
-      <div><dt>Varighet</dt><dd>3 år +</dd></div>
-      <div><dt>År</dt><dd>2018–2021</dd></div>
-    </dl>
-    <div class="story">
-      <p>Lead interaksjonsdesigner for løsninger knyttet til det å melde og følge opp skadesaker, både for kunde og saksbehandlere. Jobbet mye med automatisering og at brukeren får tilpasset informasjon og veiledning. Marthe fulgte også opp andre designere, hjalp til i komplekse oppgaver, og deltok i rekruttering og onboarding av nye designere.</p>
-      <p>Med komplekse datastrukturer i bunn og mange mennesker som jobbet sammen, fikk Marthe god erfaring i å visualisere både prosesser og systemer for å skape godt samarbeid.</p>
-    </div>
-  </div>
-  <div class="gallery">
-    <figure>
-      <div class="pair">
-        <img src="img/fors-release.jpg" alt="Flytskisse for første versjon av skademelding, fra innlogging til hendelsessteg." loading="lazy">
-        <img src="img/fors-flyt.jpg" alt="Oversikt over hele brukerflyten for skademelding på bil." loading="lazy">
-        <img src="img/fors-kontakt.jpg" alt="Scenarioer for kontaktinformasjon som allerede finnes, med validering og feiltilstander." loading="lazy">
-        <img src="img/fors-feil.jpg" alt="Feilmelding med teksten «Oisann! Noe gikk galt hos oss» og veiledning videre." loading="lazy">
-      </div>
-      <figcaption>Her jobbet Marthe både med overordnede flyter og prototyping, oversikter med regler for blant annet lagring av data, og kontinuerlige forbedringer av alt fra oversikter over forsikringer man kan melde skadesak på, til feilmeldinger.</figcaption>
-    </figure>
-    <figure>
-      <img src="img/fors-workshop.jpg" alt="Digitale workshop-tavler om språk, samarbeid og research, fylt med lapper fra designteamet." loading="lazy">
-      <figcaption>Fasilitering av workshop for designteamet.</figcaption>
-    </figure>
-  </div>
-  <a class="back" href="#prosjekter">← <span>Til porteføljeoversikten</span></a>
-  <div class="next"><span>Neste prosjekt</span><a href="#studio">Impact Startup: Studio</a></div>
-</article>
-
-<!-- ============ STUDIO ============ -->
+<!-- ============ IMPACT STARTUP: STUDIO ============ -->
 <article class="case wrap" id="view-studio" hidden>
+  <div class="crumbs label"><a href="#prosjekter">← Portefølje</a><span>01 / 07</span></div>
   <h1>Impact Startup: Studio</h1>
   <p class="lead">Et digitalt tilbud for startups som vil skape positive samfunnsendringer.</p>
   <figure class="hero"><img src="img/studio-hero.jpg" alt="Bærbar PC som viser forsiden til Studio." loading="lazy"></figure>
-  <div class="facts">
-    <dl>
-      <div><dt>Rolle</dt><dd>Senior interaksjonsdesigner</dd></div>
-      <div><dt>Ansvar</dt><dd>Workshopfasilitering, prioriteringer, konsept, skjema, universell utforming</dd></div>
-      <div><dt>Varighet</dt><dd>6 uker</dd></div>
-      <div><dt>År</dt><dd>2023</dd></div>
-    </dl>
-    <div class="story">
-      <p>Impact Startup hjelper oppstartsbedrifter som ønsker å gjøre en positiv endring for samfunnet eller miljøet. Bedriftene får veiledning med blant annet forretningsutvikling, nettverk og finansiering.</p>
-      <p>Nå ønsket Impact Startup å tilgjengeliggjøre «noe mer» digitalt, for å gi selskaper enda mer fart i veien mot å lykkes. Det nye produktet ble kalt Studio.</p>
-    </div>
+  <div class="facts grid">
+    <dl><div><dt>Rolle</dt><dd>Senior interaksjonsdesigner</dd></div><div><dt>Ansvar</dt><dd>Workshopfasilitering, prioriteringer, konsept, skjema, universell utforming</dd></div><div><dt>Varighet</dt><dd>6 uker</dd></div><div><dt>År</dt><dd>2023</dd></div></dl>
+    <div class="story"><p>Impact Startup hjelper oppstartsbedrifter som ønsker å gjøre en positiv endring for samfunnet eller miljøet. Bedriftene får veiledning med blant annet forretningsutvikling, nettverk og finansiering.</p><p>Nå ønsket Impact Startup å tilgjengeliggjøre «noe mer» digitalt, for å gi selskaper enda mer fart i veien mot å lykkes. Det nye produktet ble kalt Studio.</p></div>
   </div>
-  <div class="gallery">
-    <figure>
-      <img src="img/studio-workshop.jpg" alt="Tre workshop-tavler med lapper som er gruppert og prioritert." loading="lazy">
-      <figcaption>Oversikt og prioritering av brukergrupper, brukerbehov og forretningsbehov. Marthe holdt i fasiliteringen og hjalp Impact Startup med å få oversikt og prioritere, slik at konseptutviklingen kunne starte.</figcaption>
-    </figure>
-    <figure class="narrow">
-      <img src="img/studio-skjema.jpg" alt="Skjema for å bestille en gratis time med forretningsutvikler, med store svaralternativer og tydelige ledetekster." loading="lazy">
-      <figcaption>Skjema, med universell utforming ivaretatt.</figcaption>
-    </figure>
-  </div>
-  <a class="back" href="#prosjekter">← <span>Til porteføljeoversikten</span></a>
-  <div class="next"><span>Neste prosjekt</span><a href="#postbud">Postbudhjelp</a></div>
-</article>
-
-<!-- ============ POSTBUD ============ -->
-<article class="case wrap" id="view-postbud" hidden>
-  <h1>Postbud</h1>
-  <p class="lead">Et av prosjektene i arbeidstiden hos Posten og Bring.</p>
-  <figure class="hero"><img src="img/post-hero.jpg" alt="Postens elektriske varebil parkert ved en postkasse." loading="lazy"></figure>
-  <div class="facts">
-    <dl>
-      <div><dt>Rolle</dt><dd>Interaksjonsdesigner</dd></div>
-      <div><dt>Ansvar</dt><dd>Informasjonsarkitektur, interaksjonsdesign, innsikt</dd></div>
-      <div><dt>År</dt><dd>2016</dd></div>
-    </dl>
-    <div class="story">
-      <p>Postbud har en rekke rutiner å forholde seg til, for eksempel hva man skal gjøre dersom en pakke må sendes i retur. Det ble startet et prosjekt der rutinene skulle bli tilgjengelige for postbudene via en responsiv nettside.</p>
-    </div>
-  </div>
-  <div class="gallery">
-    <figure class="narrow">
-      <img src="img/post-persona.jpg" alt="Persona for et postbud, med utfordringer på jobb og krav til løsningen." loading="lazy">
-      <figcaption>Persona basert på innsikt fra postbud.</figcaption>
-    </figure>
-    <figure class="mid">
-      <img src="img/post-sprak.jpg" alt="Liste over rutiner og en oversikt over begreper som brukes om det samme, som brev, post og sendinger." loading="lazy">
-      <figcaption>Arbeid med språk og begreper.</figcaption>
-    </figure>
-    <figure class="narrow">
-      <img src="img/post-foto.jpg" alt="Kortsortering på vegg, der rutiner er gruppert under kategorier." loading="lazy">
-    </figure>
-    <figure>
-      <img src="img/post-nav.jpg" alt="Prototype av navigasjonsstrukturen med hovednavigasjon, rutineområde og eksempelartikler." loading="lazy">
-    </figure>
-    <figure>
-      <img src="img/post-desktop.jpg" alt="Forside på desktop med søkefelt, nyheter og nyttige lenker." loading="lazy">
-    </figure>
-  </div>
-  <a class="back" href="#prosjekter">← <span>Til porteføljeoversikten</span></a>
-  <div class="next"><span>Neste prosjekt</span><a href="#motione">MotiOne</a></div>
-</article>
-
-<!-- ============ MOTIONE ============ -->
-<article class="case wrap" id="view-motione" hidden>
-  <h1>MotiOne</h1>
-  <p class="lead">Aktivitet gjennom jobben.</p>
-  <figure class="hero"><img src="img/moti-hero.jpg" alt="Adminpanel for MotiOne med rapport over skritt og aktivitetsminutter for hele bedriften." loading="lazy"></figure>
-  <div class="facts">
-    <dl>
-      <div><dt>Rolle</dt><dd>UX/UI-designer</dd></div>
-      <div><dt>Ansvar</dt><dd>I starten navigasjon, strukturering og språk. Senere også grafisk design.</dd></div>
-      <div><dt>Varighet</dt><dd>Ca. 2 år</dd></div>
-      <div><dt>År</dt><dd>2017–2018</dd></div>
-    </dl>
-    <div class="story">
-      <p>MotiOne var en digital tjeneste med mål om å bidra til økt aktivitet og tilhørighet på arbeidsplasser. Kun 3 av 10 ansatte i Norge oppfyller anbefalingene fra WHO og Helsedirektoratet om 30 minutter aktivitet om dagen. MotiOne hadde som mål å løse dette gjennom felles aktiviteter og konkurranser i bedrifter.</p>
-      <p>I prosjektet jobbet vi blant annet med arrangements-, gruppe- og konkurransefunksjonalitet, tilkobling av eksterne aktivitetsmålere og visning av aktivitetsdata.</p>
-    </div>
-  </div>
-  <div class="gallery">
-    <figure><img src="img/moti-aktivitet.jpg" alt="Mobilskjerm med ukeoversikt over egen aktivitet, poeng og ukemål." loading="lazy"></figure>
-    <figure><img src="img/moti-team.jpg" alt="Mobilskjermer for grupper og arrangementer." loading="lazy"></figure>
-    <figure><img src="img/moti-konk.jpg" alt="Mobilskjermer for skrittkonkurranse og toppliste." loading="lazy"></figure>
-    <div class="pair">
-      <img src="img/moti-swot.jpg" alt="SWOT-analyse på vegg med lapper for styrker, svakheter, muligheter og trusler." loading="lazy">
-      <img src="img/moti-skisse.jpg" alt="Håndtegnede skisser av skjermer for arrangement og konkurranse." loading="lazy">
-    </div>
-  </div>
-  <a class="back" href="#prosjekter">← <span>Til porteføljeoversikten</span></a>
-  <div class="next"><span>Neste prosjekt</span><a href="#aidn">Aidn</a></div>
+  <section class="part" aria-label="Workshop og prioritering">
+    <div class="head label">Workshop og prioritering</div>
+    <img src="img/studio-workshop.jpg" alt="Tre workshop-tavler med lapper som er gruppert og prioritert." loading="lazy">
+    <p class="cap">Oversikt og prioritering av brukergrupper, brukerbehov og forretningsbehov. Marthe holdt i fasiliteringen og hjalp Impact Startup med å få oversikt og prioritere, slik at konseptutviklingen kunne starte.</p>
+  </section>
+  <section class="part" aria-label="Skjema">
+    <div class="head label">Skjema</div>
+    <div class="narrow"><img src="img/studio-skjema.jpg" alt="Skjema for å bestille en gratis time med forretningsutvikler, med store svaralternativer og tydelige ledetekster." loading="lazy"></div>
+    <p class="cap">Skjema, med universell utforming ivaretatt.</p>
+  </section>
+  <nav class="pager" aria-label="Flere prosjekter"><span></span><a class="next" href="#aidn"><span class="label">Neste prosjekt →</span><span class="t">Aidn</span></a></nav>
 </article>
 
 <!-- ============ AIDN ============ -->
 <article class="case wrap" id="view-aidn" hidden>
+  <div class="crumbs label"><a href="#prosjekter">← Portefølje</a><span>02 / 07</span></div>
   <h1>Aidn</h1>
   <p class="lead">En pasientjournal der man har startet helt på nytt med hvordan man kan dokumentere og kommunisere i helsevesenet.</p>
   <figure class="hero"><img src="img/aidn-hero.jpg" alt="Pasientrom med senger og rullestol." loading="lazy"></figure>
-  <div class="facts">
-    <dl>
-      <div><dt>Rolle</dt><dd>Senior interaksjonsdesigner</dd></div>
-      <div><dt>Ansvar</dt><dd>Navigasjon, struktur og oppsett. Brukerinnsikt, workshopfasilitering, skisser, skjema, kontaktperson for pilotkunder, produktansvarlig ved behov</dd></div>
-      <div><dt>Varighet</dt><dd>Ca. 1,5 år</dd></div>
-      <div><dt>År</dt><dd>2021–2022</dd></div>
-    </dl>
-    <div class="story">
-      <p>Marthe jobbet tett sammen med en designer, tre utviklere og to fagansvarlige, og hjalp Aidn med å konkretisere og visualisere de første konseptene for et helt nytt journalsystem.</p>
-      <p>Vi fokuserte på å få bygget noe som kunne gi verdi til både pasienter og ansatte, uten å bli for stort, og uten at det ble en belastning i en allerede hektisk arbeidshverdag. Parallelt jobbet vi med at løsningen var robust nok til å håndtere pasientdata, i en ramme som var tydelig nok til å gi struktur, og samtidig fleksibel nok for videre eksperimenter. Marthe ble med videre da Aidn vokste og fikk flere team.</p>
-    </div>
+  <div class="facts grid">
+    <dl><div><dt>Rolle</dt><dd>Senior interaksjonsdesigner</dd></div><div><dt>Ansvar</dt><dd>Navigasjon, struktur og oppsett. Brukerinnsikt, workshopfasilitering, skisser, skjema, kontaktperson for pilotkunder, produktansvarlig ved behov</dd></div><div><dt>Varighet</dt><dd>Ca. 1,5 år</dd></div><div><dt>År</dt><dd>2021–2022</dd></div></dl>
+    <div class="story"><p>Marthe jobbet tett sammen med en designer, tre utviklere og to fagansvarlige, og hjalp Aidn med å konkretisere og visualisere de første konseptene for et helt nytt journalsystem.</p><p>Vi fokuserte på å få bygget noe som kunne gi verdi til både pasienter og ansatte, uten å bli for stort, og uten at det ble en belastning i en allerede hektisk arbeidshverdag. Parallelt jobbet vi med at løsningen var robust nok til å håndtere pasientdata, i en ramme som var tydelig nok til å gi struktur, og samtidig fleksibel nok for videre eksperimenter. Marthe ble med videre da Aidn vokste og fikk flere team.</p></div>
   </div>
-  <div class="gallery">
-    <figure>
-      <img src="img/aidn-oversikt.jpg" alt="Utskrift av pasientliste med forhåndsvisning og valg for visningstype og data." loading="lazy">
-      <figcaption>Noe av det første vi lagde, var en oversikt over pasienter på en avdeling. Oversikten kunne skrives ut i ulike formater, basert på hvordan helsepersonell foretrakk å brette arket når de hadde det i lomma. Da fikk vi ivaretatt at det aller viktigste om pasienten alltid var synlig, samtidig som det var plass til å ta notater når man ikke var ved en datamaskin eller et nettbrett.</figcaption>
-    </figure>
-    <figure>
-      <img src="img/aidn-skjema.jpg" alt="Skjema for målsamtale med forslag til svar som kan legges til med ett trykk." loading="lazy">
-      <figcaption>Skjema som fungerer uansett hvilken digital enhet du har på jobb. Med forslag til svar går det raskt å fylle ut skjemaer, for eksempel når en sykepleier er i samtale med en pasient.</figcaption>
-    </figure>
+  <section class="part" aria-label="Pasientoversikt">
+    <div class="head label">Pasientoversikt</div>
+    <img src="img/aidn-oversikt.jpg" alt="Utskrift av pasientliste med forhåndsvisning og valg for visningstype og data." loading="lazy">
+    <p class="cap">Noe av det første vi lagde, var en oversikt over pasienter på en avdeling. Oversikten kunne skrives ut i ulike formater, basert på hvordan helsepersonell foretrakk å brette arket når de hadde det i lomma. Da fikk vi ivaretatt at det aller viktigste om pasienten alltid var synlig, samtidig som det var plass til å ta notater når man ikke var ved en datamaskin eller et nettbrett.</p>
+  </section>
+  <section class="part" aria-label="Skjema">
+    <div class="head label">Skjema</div>
+    <img src="img/aidn-skjema.jpg" alt="Skjema for målsamtale med forslag til svar som kan legges til med ett trykk." loading="lazy">
+    <p class="cap">Skjema som fungerer uansett hvilken digital enhet du har på jobb. Med forslag til svar går det raskt å fylle ut skjemaer, for eksempel når en sykepleier er i samtale med en pasient.</p>
+  </section>
+  <nav class="pager" aria-label="Flere prosjekter"><a class="prev" href="#studio"><span class="label">← Forrige</span><span class="t">Impact Startup: Studio</span></a><a class="next" href="#forsikring"><span class="label">Neste prosjekt →</span><span class="t">Forsikringsselskap</span></a></nav>
+</article>
+
+<!-- ============ FORSIKRINGSSELSKAP ============ -->
+<article class="case wrap" id="view-forsikring" hidden>
+  <div class="crumbs label"><a href="#prosjekter">← Portefølje</a><span>03 / 07</span></div>
+  <h1>Forsikringsselskap</h1>
+  <p class="lead">Digitalisering, automatisering, designsystem og samarbeid på tvers av språk og land.</p>
+  <figure class="hero"><img src="img/fors-hero.jpg" alt="Brukertest over video, der en testdeltaker går gjennom en prototype for oppfølging av skadesak på mobil." loading="lazy"></figure>
+  <div class="facts grid">
+    <dl><div><dt>Rolle</dt><dd>Senior og lead interaksjonsdesigner</dd></div><div><dt>Ansvar</dt><dd>Planlegge og organisere designarbeid. Fagansvarlig på tvers av team. Levere mot produktteam og jobbe tett med forretning, prosess og produkt.</dd></div><div><dt>Varighet</dt><dd>3 år +</dd></div><div><dt>År</dt><dd>2018–2021</dd></div></dl>
+    <div class="story"><p>Lead interaksjonsdesigner for løsninger knyttet til det å melde og følge opp skadesaker, både for kunde og saksbehandlere. Jobbet mye med automatisering og at brukeren får tilpasset informasjon og veiledning. Marthe fulgte også opp andre designere, hjalp til i komplekse oppgaver, og deltok i rekruttering og onboarding av nye designere.</p><p>Med komplekse datastrukturer i bunn og mange mennesker som jobbet sammen, fikk Marthe god erfaring i å visualisere både prosesser og systemer for å skape godt samarbeid.</p></div>
   </div>
-  <a class="back" href="#prosjekter">← <span>Til porteføljeoversikten</span></a>
-  <div class="next"><span>Neste prosjekt</span><a href="#aldring-og-helse">Aldring og helse</a></div>
+  <section class="part" aria-label="Flyt, regler og feilmeldinger">
+    <div class="head label">Flyt, regler og feilmeldinger</div>
+    <div class="tiles"><div><img src="img/fors-release.jpg" alt="Flytskisse for første versjon av skademelding, fra innlogging til hendelsessteg." loading="lazy"></div><div><img src="img/fors-flyt.jpg" alt="Oversikt over hele brukerflyten for skademelding på bil." loading="lazy"></div><div><img src="img/fors-kontakt.jpg" alt="Scenarioer for kontaktinformasjon som allerede finnes, med validering og feiltilstander." loading="lazy"></div><div><img src="img/fors-feil.jpg" alt="Feilmelding med teksten «Oisann! Noe gikk galt hos oss» og veiledning videre." loading="lazy"></div></div>
+    <p class="cap">Her jobbet Marthe både med overordnede flyter og prototyping, oversikter med regler for blant annet lagring av data, og kontinuerlige forbedringer av alt fra oversikter over forsikringer man kan melde skadesak på, til feilmeldinger.</p>
+  </section>
+  <section class="part" aria-label="Workshop">
+    <div class="head label">Workshop</div>
+    <img src="img/fors-workshop.jpg" alt="Digitale workshop-tavler om språk, samarbeid og research, fylt med lapper fra designteamet." loading="lazy">
+    <p class="cap">Fasilitering av workshop for designteamet.</p>
+  </section>
+  <nav class="pager" aria-label="Flere prosjekter"><a class="prev" href="#aidn"><span class="label">← Forrige</span><span class="t">Aidn</span></a><a class="next" href="#aldring-og-helse"><span class="label">Neste prosjekt →</span><span class="t">Aldring og helse</span></a></nav>
 </article>
 
 <!-- ============ ALDRING OG HELSE ============ -->
 <article class="case wrap" id="view-aldring-og-helse" hidden>
+  <div class="crumbs label"><a href="#prosjekter">← Portefølje</a><span>04 / 07</span></div>
   <h1>Aldring og helse</h1>
   <p class="lead">Nye nettsider og prosessledelse.</p>
   <figure class="hero"><img src="img/ah-hero.jpg" alt="Mobilskisser av ny meny, fagområdeside og kompetansehevingsside." loading="lazy"></figure>
-  <div class="facts">
-    <dl>
-      <div><dt>Rolle</dt><dd>Interaksjonsdesigner</dd></div>
-      <div><dt>Ansvar</dt><dd>Informasjonsarkitektur, interaksjonsdesign, prosessledelse</dd></div>
-      <div><dt>Varighet</dt><dd>Ca. et halvt år</dd></div>
-      <div><dt>År</dt><dd>2018</dd></div>
-    </dl>
-    <div class="story">
-      <p>Aldring og helse er en nasjonal kompetansetjeneste. De skal bidra til høy kvalitet i helse- og omsorgstilbudet til eldre i Norge.</p>
-      <p>Aldring og helse hadde behov for å samle inn data for videre rapportering og tilby kursbevis i forbindelse med e-læringskurs. Videre ønsket kunden et helhetlig løft av nettsidene innenfor fagområder, nyheter, intranett, kurs og butikker, og samspillet mellom disse. Marthe jobbet sammen med Aldring og helse og en utvikler i prosjektet.</p>
-    </div>
+  <div class="facts grid">
+    <dl><div><dt>Rolle</dt><dd>Interaksjonsdesigner</dd></div><div><dt>Ansvar</dt><dd>Informasjonsarkitektur, interaksjonsdesign, prosessledelse</dd></div><div><dt>Varighet</dt><dd>Ca. et halvt år</dd></div><div><dt>År</dt><dd>2018</dd></div></dl>
+    <div class="story"><p>Aldring og helse er en nasjonal kompetansetjeneste. De skal bidra til høy kvalitet i helse- og omsorgstilbudet til eldre i Norge.</p><p>Aldring og helse hadde behov for å samle inn data for videre rapportering og tilby kursbevis i forbindelse med e-læringskurs. Videre ønsket kunden et helhetlig løft av nettsidene innenfor fagområder, nyheter, intranett, kurs og butikker, og samspillet mellom disse. Marthe jobbet sammen med Aldring og helse og en utvikler i prosjektet.</p></div>
   </div>
-  <div class="gallery">
-    <figure><img src="img/ah-kort.jpg" alt="Kortsortering på bord, der kort med sidenavn er gruppert." loading="lazy"></figure>
-    <figure>
-      <div class="scroll"><img src="img/ah-struktur.jpg" alt="Sidestruktur for aldringoghelse.no med hovednavigasjon, undersider og eksterne sider." loading="lazy"></div>
-    </figure>
-    <figure class="narrow">
-      <img src="img/ah-forside.jpg" alt="Forside på desktop med åpen meny, aktuelle saker og nyhetsbrev." loading="lazy">
-      <figcaption>Informasjonsarkitektur.</figcaption>
-    </figure>
-    <div class="pair">
-      <img src="img/ah-test.jpg" alt="Mobilskjerm med spørsmålet «Fant du det du lette etter?» og knappene Ja og Nei." loading="lazy">
-      <p class="figcap" style="font-size:16px; align-self:start">Testing i nettleser av en ny seksjon, for å lære om brukerne finner det de leter etter på siden, og en egenlaget toppoppgaveundersøkelse med HubSpot-integrasjon.</p>
-    </div>
-  </div>
-  <a class="back" href="#prosjekter">← <span>Til porteføljeoversikten</span></a>
-  <div class="next"><span>Neste prosjekt</span><a href="#daman">Daman Health</a></div>
+  <section class="part" aria-label="Informasjonsarkitektur">
+    <div class="head label">Informasjonsarkitektur</div>
+    <img src="img/ah-kort.jpg" alt="Kortsortering på bord, der kort med sidenavn er gruppert." loading="lazy">
+    <div class="scroll"><img src="img/ah-struktur.jpg" alt="Sidestruktur for aldringoghelse.no med hovednavigasjon, undersider og eksterne sider." loading="lazy"></div>
+    <div class="narrow"><img src="img/ah-forside.jpg" alt="Forside på desktop med åpen meny, aktuelle saker og nyhetsbrev." loading="lazy"></div>
+  </section>
+  <section class="part" aria-label="Testing">
+    <div class="head label">Testing</div>
+    <div class="narrowsmall"><img src="img/ah-test.jpg" alt="Mobilskjerm med spørsmålet «Fant du det du lette etter?» og knappene Ja og Nei." loading="lazy"></div>
+    <p class="cap">Testing i nettleser av en ny seksjon, for å lære om brukerne finner det de leter etter på siden, og en egenlaget toppoppgaveundersøkelse med HubSpot-integrasjon.</p>
+  </section>
+  <nav class="pager" aria-label="Flere prosjekter"><a class="prev" href="#forsikring"><span class="label">← Forrige</span><span class="t">Forsikringsselskap</span></a><a class="next" href="#motione"><span class="label">Neste prosjekt →</span><span class="t">MotiOne</span></a></nav>
 </article>
 
-<!-- ============ DAMAN ============ -->
+<!-- ============ MOTIONE ============ -->
+<article class="case wrap" id="view-motione" hidden>
+  <div class="crumbs label"><a href="#prosjekter">← Portefølje</a><span>05 / 07</span></div>
+  <h1>MotiOne</h1>
+  <p class="lead">Aktivitet gjennom jobben.</p>
+  <figure class="hero"><img src="img/moti-hero.jpg" alt="Adminpanel for MotiOne med rapport over skritt og aktivitetsminutter for hele bedriften." loading="lazy"></figure>
+  <div class="facts grid">
+    <dl><div><dt>Rolle</dt><dd>UX/UI-designer</dd></div><div><dt>Ansvar</dt><dd>I starten navigasjon, strukturering og språk. Senere også grafisk design.</dd></div><div><dt>Varighet</dt><dd>Ca. 2 år</dd></div><div><dt>År</dt><dd>2017–2018</dd></div></dl>
+    <div class="story"><p>MotiOne var en digital tjeneste med mål om å bidra til økt aktivitet og tilhørighet på arbeidsplasser. Kun 3 av 10 ansatte i Norge oppfyller anbefalingene fra WHO og Helsedirektoratet om 30 minutter aktivitet om dagen. MotiOne hadde som mål å løse dette gjennom felles aktiviteter og konkurranser i bedrifter.</p><p>I prosjektet jobbet vi blant annet med arrangements-, gruppe- og konkurransefunksjonalitet, tilkobling av eksterne aktivitetsmålere og visning av aktivitetsdata.</p></div>
+  </div>
+  <section class="part" aria-label="Appen">
+    <div class="head label">Appen</div>
+    <img src="img/moti-aktivitet.jpg" alt="Mobilskjerm med ukeoversikt over egen aktivitet, poeng og ukemål." loading="lazy">
+    <img src="img/moti-team.jpg" alt="Mobilskjermer for grupper og arrangementer." loading="lazy">
+    <img src="img/moti-konk.jpg" alt="Mobilskjermer for skrittkonkurranse og toppliste." loading="lazy">
+  </section>
+  <section class="part" aria-label="Prosess">
+    <div class="head label">Prosess</div>
+    <div class="pair"><img src="img/moti-swot.jpg" alt="SWOT-analyse på vegg med lapper for styrker, svakheter, muligheter og trusler." loading="lazy"><img src="img/moti-skisse.jpg" alt="Håndtegnede skisser av skjermer for arrangement og konkurranse." loading="lazy"></div>
+  </section>
+  <nav class="pager" aria-label="Flere prosjekter"><a class="prev" href="#aldring-og-helse"><span class="label">← Forrige</span><span class="t">Aldring og helse</span></a><a class="next" href="#daman"><span class="label">Neste prosjekt →</span><span class="t">Daman Health</span></a></nav>
+</article>
+
+<!-- ============ DAMAN HEALTH ============ -->
 <article class="case wrap" id="view-daman" hidden>
+  <div class="crumbs label"><a href="#prosjekter">← Portefølje</a><span>06 / 07</span></div>
   <h1>Daman Health</h1>
   <p class="lead">En app med formål å få flere til å velge allmennlege.</p>
   <figure class="hero"><img src="img/daman-hero.jpg" alt="To mobiler som viser appen, med «Find the care you need» og anbefalte leger i nærheten." loading="lazy"></figure>
-  <div class="facts">
-    <dl>
-      <div><dt>Rolle</dt><dd>UX/UI-designer</dd></div>
-      <div><dt>Ansvar</dt><dd>Informasjonsarkitektur, interaksjonsdesign, innhold og UI</dd></div>
-      <div><dt>Varighet</dt><dd>3 måneder</dd></div>
-      <div><dt>År</dt><dd>2017</dd></div>
-    </dl>
-    <div class="story">
-      <p>Daman Health er helsesystemet i De forente arabiske emirater, med 3 millioner innbyggere som kunder.</p>
-      <p>Daman erfarte at mange dro rett til legespesialist, fremfor å få veiledning og hjelp først hos en allmennlege. Marthe jobbet som UX/UI-designer i et team med to utviklere, der de sammen testet ut et konsept for å ivareta og hjelpe brukeren på best mulig måte. Konseptet tok utgangspunkt i situasjonen brukeren var i: Hva opplever du nå?</p>
-    </div>
+  <div class="facts grid">
+    <dl><div><dt>Rolle</dt><dd>UX/UI-designer</dd></div><div><dt>Ansvar</dt><dd>Informasjonsarkitektur, interaksjonsdesign, innhold og UI</dd></div><div><dt>Varighet</dt><dd>3 måneder</dd></div><div><dt>År</dt><dd>2017</dd></div></dl>
+    <div class="story"><p>Daman Health er helsesystemet i De forente arabiske emirater, med 3 millioner innbyggere som kunder.</p><p>Daman erfarte at mange dro rett til legespesialist, fremfor å få veiledning og hjelp først hos en allmennlege. Marthe jobbet som UX/UI-designer i et team med to utviklere, der de sammen testet ut et konsept for å ivareta og hjelpe brukeren på best mulig måte. Konseptet tok utgangspunkt i situasjonen brukeren var i: Hva opplever du nå?</p></div>
   </div>
-  <div class="gallery">
-    <div class="pair">
-      <img src="img/daman-foto.jpg" alt="Skisser og notater spredt på et bord under arbeidsøkt." loading="lazy">
-      <img src="img/daman-skisse.jpg" alt="Håndskrevne spørsmål om brukerens situasjon og behov." loading="lazy">
-    </div>
-    <figure>
-      <div class="scroll"><img src="img/daman-flyt.jpg" alt="Flytdiagram for appen med fanene Min dekning og Lagrede leger." loading="lazy"></div>
-      <figcaption>Informasjonsarkitektur.</figcaption>
-    </figure>
-    <figure>
-      <img src="img/daman-ui.jpg" alt="Tre skjermer av en legeprofil med verktøylinje som blir liggende fast øverst ved scrolling." loading="lazy">
-      <figcaption>UI-detaljer.</figcaption>
-    </figure>
+  <section class="part" aria-label="Skisser">
+    <div class="head label">Skisser</div>
+    <div class="pair"><img src="img/daman-foto.jpg" alt="Skisser og notater spredt på et bord under arbeidsøkt." loading="lazy"><img src="img/daman-skisse.jpg" alt="Håndskrevne spørsmål om brukerens situasjon og behov." loading="lazy"></div>
+  </section>
+  <section class="part" aria-label="Informasjonsarkitektur">
+    <div class="head label">Informasjonsarkitektur</div>
+    <div class="scroll"><img src="img/daman-flyt.jpg" alt="Flytdiagram for appen med fanene Min dekning og Lagrede leger." loading="lazy"></div>
+  </section>
+  <section class="part" aria-label="UI-detaljer">
+    <div class="head label">UI-detaljer</div>
+    <img src="img/daman-ui.jpg" alt="Tre skjermer av en legeprofil med verktøylinje som blir liggende fast øverst ved scrolling." loading="lazy">
+  </section>
+  <nav class="pager" aria-label="Flere prosjekter"><a class="prev" href="#motione"><span class="label">← Forrige</span><span class="t">MotiOne</span></a><a class="next" href="#postbud"><span class="label">Neste prosjekt →</span><span class="t">Postbudhjelp</span></a></nav>
+</article>
+
+<!-- ============ POSTBUDHJELP ============ -->
+<article class="case wrap" id="view-postbud" hidden>
+  <div class="crumbs label"><a href="#prosjekter">← Portefølje</a><span>07 / 07</span></div>
+  <h1>Postbudhjelp</h1>
+  <p class="lead">Et av prosjektene i arbeidstiden hos Posten og Bring.</p>
+  <figure class="hero"><img src="img/post-hero.jpg" alt="Postens elektriske varebil parkert ved en postkasse." loading="lazy"></figure>
+  <div class="facts grid">
+    <dl><div><dt>Rolle</dt><dd>Interaksjonsdesigner</dd></div><div><dt>Ansvar</dt><dd>Informasjonsarkitektur, interaksjonsdesign, innsikt</dd></div><div><dt>År</dt><dd>2016</dd></div></dl>
+    <div class="story"><p>Postbud har en rekke rutiner å forholde seg til, for eksempel hva man skal gjøre dersom en pakke må sendes i retur. Det ble startet et prosjekt der rutinene skulle bli tilgjengelige for postbudene via en responsiv nettside.</p></div>
   </div>
-  <a class="back" href="#prosjekter">← <span>Til porteføljeoversikten</span></a>
-  <div class="next"><span>Første prosjekt</span><a href="#forsikring">Forsikringsselskap</a></div>
+  <section class="part" aria-label="Innsikt">
+    <div class="head label">Innsikt</div>
+    <div class="narrow"><img src="img/post-persona.jpg" alt="Persona for et postbud, med utfordringer på jobb og krav til løsningen." loading="lazy"></div>
+    <p class="cap">Persona basert på innsikt fra postbud.</p>
+  </section>
+  <section class="part" aria-label="Språk og begreper">
+    <div class="head label">Språk og begreper</div>
+    <div class="mid"><img src="img/post-sprak.jpg" alt="Liste over rutiner og en oversikt over begreper som brukes om det samme, som brev, post og sendinger." loading="lazy"></div>
+    <p class="cap">Arbeid med språk og begreper.</p>
+  </section>
+  <section class="part" aria-label="Struktur og navigasjon">
+    <div class="head label">Struktur og navigasjon</div>
+    <div class="narrow"><img src="img/post-foto.jpg" alt="Kortsortering på vegg, der rutiner er gruppert under kategorier." loading="lazy"></div>
+    <img src="img/post-nav.jpg" alt="Prototype av navigasjonsstrukturen med hovednavigasjon, rutineområde og eksempelartikler." loading="lazy">
+  </section>
+  <section class="part" aria-label="Forside">
+    <div class="head label">Forside</div>
+    <img src="img/post-desktop.jpg" alt="Forside på desktop med søkefelt, nyheter og nyttige lenker." loading="lazy">
+  </section>
+  <nav class="pager" aria-label="Flere prosjekter"><a class="prev" href="#daman"><span class="label">← Forrige</span><span class="t">Daman Health</span></a><a class="next" href="#prosjekter"><span class="label">Tilbake til</span><span class="t">Alle prosjekter</span></a></nav>
 </article>
 </main>
 
-<footer class="foot">
-  <div class="wrap">
-    <span>Senior interaksjonsdesigner</span>
-    <strong>Marthe Trygg Kobro</strong>
-  </div>
-</footer>
+<footer class="wrap"><div class="foot"><span>Marthe Trygg Kobro</span><span>Portefølje</span></div></footer>
 
-<script>
-(function () {
-  var cases = ["forsikring", "studio", "postbud", "motione", "aidn", "aldring-og-helse", "daman"];
-  var home = document.getElementById("view-home");
-  var views = {};
-  cases.forEach(function (c) { views[c] = document.getElementById("view-" + c); });
-  var lastHomeTarget = null;
-
-  function route() {
-    var h = (location.hash || "").replace(/^#/, "");
-    var isCase = cases.indexOf(h) !== -1;
-    home.hidden = isCase;
-    cases.forEach(function (c) { views[c].hidden = c !== h; });
-    if (isCase) {
-      lastHomeTarget = h;
-      window.scrollTo(0, 0);
-      var t = views[h].querySelector("h1");
-      document.title = t.textContent + " – Marthe Trygg Kobro";
-    } else {
-      document.title = "Marthe Trygg Kobro";
-      var el = h ? document.getElementById(h) : null;
-      if (h === "prosjekter" && lastHomeTarget) {
-        var tile = home.querySelector('a[href="#' + lastHomeTarget + '"]');
-        if (tile) { tile.scrollIntoView({ block: "center" }); tile.focus({ preventScroll: true }); lastHomeTarget = null; return; }
-      }
-      if (el) el.scrollIntoView(); else window.scrollTo(0, 0);
-    }
-  }
-  window.addEventListener("hashchange", route);
-  route();
-})();
-</script>
-
+<script src="js/main.js"></script>
 </body>
 </html>
