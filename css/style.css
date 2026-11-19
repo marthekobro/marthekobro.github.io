@@ -338,6 +338,31 @@ body.is-case .topnav .home { display: inline; }
 .part .scroll      { overflow-x: auto; -webkit-overflow-scrolling: touch; }  /* wide diagram, scrolls sideways on phones */
 .part .scroll img  { min-width: 900px; }
 
+/* Very wide diagram (Daman flow) shown at a readable size in a box that
+ * scrolls sideways on every screen size, like the scrolling frame in the
+ * original Figma prototype. The visible scrollbar tells mouse users the
+ * box can scroll; tabindex in the HTML lets keyboard users scroll it with
+ * the arrow keys. Change the image height on phones in section 8. */
+.part .pan {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;   /* sideways swipe stays inside the box */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--subtle) var(--well);
+  padding-bottom: 8px;              /* room for the scrollbar */
+}
+.part .pan:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.part .pan img {
+  max-width: none;
+  width: auto;
+  height: 820px;                    /* tall enough to read the boxes */
+}
+.part .pan-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* Previous / next project at the bottom of each case. */
 .pager {
   display: grid;
@@ -414,6 +439,7 @@ body.is-case .foot { margin-top: 80px; }
   .part { margin-top: 56px; }
   .part .tiles,
   .part .pair { grid-template-columns: minmax(0, 1fr); }
+  .part .pan img { height: 520px; }  /* wide diagram: a bit smaller, still readable */
   .pager { grid-template-columns: minmax(0, 1fr); }
   .pager a.next { align-items: flex-start; text-align: left; }
 }
