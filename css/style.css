@@ -248,20 +248,22 @@ body.is-case .topnav .home { display: inline; }
 /* Drawer row: the whole row is a <summary> that opens a detail note.
  * Uses native <details>, so it works with keyboard and screen readers
  * without any script. The + turns into × when the drawer is open. */
-.list .item.drawer { display: block; padding: 0; position: relative; }
+.list .item.drawer { display: block; padding: 0; }
 .list .drawer summary {
   display: grid;
   grid-template-columns: 112px minmax(0, 520px) minmax(0, 1fr);
   column-gap: var(--gap);
   align-items: baseline;
+  position: relative;
   padding: 16px 40px 16px 0;     /* room for the + on the right */
   cursor: pointer;
   list-style: none;
 }
 .list .drawer summary::-webkit-details-marker { display: none; }
-/* The + sits on the whole row (summary and open note), centred in its
- * height. Two 1.5px bars, so it rotates into an x around its true centre. */
-.list .item.drawer::after {
+/* The + sits on the right of the title row and stays there when the
+ * drawer opens. Two 1.5px bars, so it rotates into an x around its true
+ * centre. */
+.list .drawer summary::after {
   content: "";
   position: absolute;
   right: 6px;
@@ -272,10 +274,9 @@ body.is-case .topnav .home { display: inline; }
   background:
     linear-gradient(var(--fg), var(--fg)) center / 100% 1.5px no-repeat,
     linear-gradient(var(--fg), var(--fg)) center / 1.5px 100% no-repeat;
-  pointer-events: none;            /* clicks go to the row underneath */
   transition: transform .2s ease;
 }
-.list .item.drawer:has(details[open])::after { transform: rotate(45deg); }
+.list .drawer details[open] summary::after { transform: rotate(45deg); }
 .list .drawer summary:hover .what,
 .list .drawer summary:focus-visible .what { color: var(--accent); }
 .list .drawer summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
