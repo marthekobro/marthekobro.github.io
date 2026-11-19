@@ -13,6 +13,9 @@
  * index.html, a row linking to #NAME in the project index, and NAME to
  * CASES below (in the same order as the index).
  *
+ * Further down, a second small block lets visitors drag wide diagrams
+ * (.pan boxes) sideways with the mouse or trackpad.
+ *
  * Note: this file was written with AI assistance (Claude, by Anthropic).
  */
 (function () {
@@ -76,4 +79,47 @@
 
   window.addEventListener("hashchange", route);
   route();
+})();
+
+
+/*
+ * Drag to pan: wide diagrams in a .pan box can be grabbed and dragged
+ * sideways with a mouse, or with a trackpad click-and-drag. Two-finger
+ * swipes and touch screens already scroll the box natively, so this only
+ * handles mouse-type pointers. The cursor shows an open hand, and a closed
+ * hand while dragging (styles in css/style.css, section 6).
+ */
+(function () {
+  "use strict";
+
+  document.querySelectorAll(".pan").forEach(function (box) {
+    var startX = 0;        // pointer position when the drag started
+    var startScroll = 0;   // box scroll position when the drag started
+
+    // Stop the browser from dragging the image itself as a file.
+    box.addEventListener("dragstart", function (event) {
+      event.preventDefault();
+    });
+
+    box.addEventListener("pointerdown", function (event) {
+      if (event.pointerType !== "mouse" || event.button !== 0) return;
+      startX = event.clientX;
+      startScroll = box.scrollLeft;
+      box.classList.add("is-dragging");
+      box.setPointerCapture(event.pointerId);
+    });
+
+    box.addEventListener("pointermove", function (event) {
+      if (!box.classList.contains("is-dragging")) return;
+      box.scrollLeft = startScroll - (event.clientX - startX);
+    });
+
+    function stop(event) {
+      if (!box.classList.contains("is-dragging")) return;
+      box.classList.remove("is-dragging");
+      box.releasePointerCapture(event.pointerId);
+    }
+    box.addEventListener("pointerup", stop);
+    box.addEventListener("pointercancel", stop);
+  });
 })();
