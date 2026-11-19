@@ -418,6 +418,12 @@ body.is-case .foot { margin-top: 80px; }
   .pager a.next { align-items: flex-start; text-align: left; }
 }
 
+/* Phones: hide the name link in the case-page menu. On narrow screens it
+ * wraps onto two lines, and "← Portefølje" below already leads home. */
+@media (max-width: 480px) {
+  body.is-case .topnav .home { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .row,
