@@ -260,16 +260,17 @@ body.is-case .topnav .home { display: inline; }
   list-style: none;
 }
 .list .drawer summary::-webkit-details-marker { display: none; }
-.list .drawer summary::after {
-  content: "+";
+.list .drawer summary::after {    /* + drawn as two 1.5px bars, so it rotates around its true centre */
+  content: "";
   position: absolute;
-  right: 4px;
+  right: 6px;
   top: 50%;
-  margin-top: -16px;
-  font-size: 28px;
-  font-weight: 200;
-  line-height: 32px;
-  color: var(--fg);
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  background:
+    linear-gradient(var(--fg), var(--fg)) center / 100% 1.5px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) center / 1.5px 100% no-repeat;
   transition: transform .2s ease;
 }
 .list .drawer details[open] summary::after { transform: rotate(45deg); }
