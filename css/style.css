@@ -226,7 +226,7 @@ body.is-case .topnav .home { display: inline; }
   color: var(--text);
 }
 
-/* Experience and Education lists: When | What | Where. */
+/* Experience, Education, Courses and Talks lists: When | What | Where. */
 .list ol,
 .list ul { list-style: none; margin: 0; padding: 0; }
 .list .head,
@@ -240,6 +240,14 @@ body.is-case .topnav .home { display: inline; }
 .list .what  { font-size: 26px; font-weight: 300; line-height: 1.25; }
 .list .where { font-size: 19px; color: var(--muted); line-height: 1.35; }
 .list.small .what { font-size: 22px; }
+.list .note {                    /* optional detail line under a title */
+  display: block;
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--muted);
+}
 
 
 /* 6. Case pages ---------------------------------------------------------- */
