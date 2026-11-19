@@ -78,6 +78,7 @@ the layout:
 | `pair`         | Two images side by side (stacked on phones)            |
 | `tiles`        | Grid of screenshots on grey boxes, two per row         |
 | `scroll`       | Wide diagram that scrolls sideways on small screens    |
+| `pan`          | Very wide diagram shown large, scrolls sideways always |
 
 ## Preview locally
 
