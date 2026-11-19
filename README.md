@@ -50,6 +50,9 @@ is in section 8 at the bottom of `css/style.css`.
 **Replace an image.** Put the new file in `img/`, then update `src` and `alt`
 on the `<img>` tag in `index.html`. Keep `alt` as a short description of what
 the image shows.
+Export screenshots and diagrams at 2x the size they are shown on screen
+(for example 2704px wide for a full-width image), so they stay sharp on
+high-resolution displays. Save as JPG at about 80–85 % quality.
 
 **Add a project.**
 1. Copy an existing `<article class="case wrap" id="view-...">` block in
