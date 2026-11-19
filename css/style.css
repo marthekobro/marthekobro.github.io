@@ -245,11 +245,42 @@ body.is-case .topnav .home { display: inline; }
 .list.compact .item  { padding: 10px 0; }
 .list.compact .what  { font-size: 17px; font-weight: 400; color: var(--text); }
 .list.compact .where { font-size: 16px; }
-.list .note {                    /* optional detail line under a title */
-  display: block;
-  margin-top: 6px;
+/* Drawer row: the whole row is a <summary> that opens a detail note.
+ * Uses native <details>, so it works with keyboard and screen readers
+ * without any script. The + turns into × when the drawer is open. */
+.list .item.drawer { display: block; padding: 0; }
+.list .drawer summary {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 520px) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: baseline;
+  position: relative;
+  padding: 16px 40px 16px 0;     /* room for the + on the right */
+  cursor: pointer;
+  list-style: none;
+}
+.list .drawer summary::-webkit-details-marker { display: none; }
+.list .drawer summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  margin-top: -16px;
+  font-size: 28px;
+  font-weight: 200;
+  line-height: 32px;
+  color: var(--fg);
+  transition: transform .2s ease;
+}
+.list .drawer details[open] summary::after { transform: rotate(45deg); }
+.list .drawer summary:hover .what,
+.list .drawer summary:focus-visible .what { color: var(--accent); }
+.list .drawer summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.list .drawer .note {
+  max-width: calc(112px + var(--gap) + 520px);
+  margin: -4px 0 0;
+  padding: 0 0 20px calc(112px + var(--gap));
   font-size: 16px;
-  font-weight: 400;
   line-height: 1.5;
   color: var(--muted);
 }
@@ -443,6 +474,8 @@ body.is-case .foot { margin-top: 80px; }
   .list .head { display: block; }
   .list .head span:first-child { display: none; }  /* hide "Når" */
   .list .item { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+  .list .drawer summary { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+  .list .drawer .note { padding-left: 0; }
   .list .what { font-size: 22px; }
   .list.small .what { font-size: 20px; }
   .list.compact .what  { font-size: 17px; }

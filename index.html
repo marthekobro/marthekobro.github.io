@@ -78,11 +78,17 @@
     </ol>
   </section>
 
-  <!-- Each item can have a .note under the title for extra detail. -->
+  <!-- An item with class "drawer" hides extra detail in a <details> box that
+       opens when the row is clicked. The + icon is drawn in CSS. -->
   <section class="block list small" id="utdanning" aria-labelledby="utdanning-tittel">
     <h2 class="head label"><span aria-hidden="true">Når</span><span id="utdanning-tittel">Utdanning og kurs</span></h2>
     <ul>
-      <li class="item"><span class="when">2020</span><span class="what">UX Certificate, design management<span class="note">Fem kurs med bestått eksamen: Being a UX Leader, Design Tradeoffs and UX Decision Frameworks, DesignOps: Scaling UX Design and User Research, Facilitating UX Workshops og Generating Big Ideas with Design Thinking.</span></span><span class="where">Nielsen Norman Group</span></li>
+      <li class="item drawer">
+        <details>
+          <summary><span class="when">2020</span><span class="what">UX Certificate, design management</span><span class="where">Nielsen Norman Group</span></summary>
+          <p class="note">Fem kurs med bestått eksamen: Being a UX Leader, Design Tradeoffs and UX Decision Frameworks, DesignOps: Scaling UX Design and User Research, Facilitating UX Workshops og Generating Big Ideas with Design Thinking.</p>
+        </details>
+      </li>
       <li class="item"><span class="when">2020</span><span class="what">Elements of AI</span><span class="where">Universitetet i Helsinki og NTNU</span></li>
       <li class="item"><span class="when">2015</span><span class="what">Kommunikasjonsdesign, visuell identitet og merkevarebygging</span><span class="where">Westerdals Kompetanse</span></li>
       <li class="item"><span class="when">2015</span><span class="what">Universell utforming av IKT</span><span class="where">Difi</span></li>
