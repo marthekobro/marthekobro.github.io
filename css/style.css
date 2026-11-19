@@ -342,7 +342,8 @@ body.is-case .topnav .home { display: inline; }
  * scrolls sideways on every screen size, like the scrolling frame in the
  * original Figma prototype. The visible scrollbar tells mouse users the
  * box can scroll; tabindex in the HTML lets keyboard users scroll it with
- * the arrow keys. Change the image height on phones in section 8. */
+ * the arrow keys, and js/main.js lets mouse users drag it sideways.
+ * Change the image height on phones in section 8. */
 .part .pan {
   overflow-x: auto;
   overscroll-behavior-x: contain;   /* sideways swipe stays inside the box */
@@ -350,8 +351,10 @@ body.is-case .topnav .home { display: inline; }
   scrollbar-width: thin;
   scrollbar-color: var(--subtle) var(--well);
   padding-bottom: 8px;              /* room for the scrollbar */
+  cursor: grab;                     /* drag to pan, see js/main.js */
 }
 .part .pan:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.part .pan.is-dragging { cursor: grabbing; user-select: none; }
 .part .pan img {
   max-width: none;
   width: auto;
