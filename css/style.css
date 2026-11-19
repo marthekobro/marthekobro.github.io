@@ -226,7 +226,7 @@ body.is-case .topnav .home { display: inline; }
   color: var(--text);
 }
 
-/* Experience, Education, Courses and Talks lists: When | What | Where. */
+/* Experience, Education and Talks lists: When | What | Where. */
 .list ol,
 .list ul { list-style: none; margin: 0; padding: 0; }
 .list .head,
@@ -240,6 +240,11 @@ body.is-case .topnav .home { display: inline; }
 .list .what  { font-size: 26px; font-weight: 300; line-height: 1.25; }
 .list .where { font-size: 19px; color: var(--muted); line-height: 1.35; }
 .list.small .what { font-size: 22px; }
+/* Quieter list (Undervisning og foredrag): smaller text, tighter rows. */
+.list.compact { margin-top: 72px; }
+.list.compact .item  { padding: 10px 0; }
+.list.compact .what  { font-size: 17px; font-weight: 400; color: var(--text); }
+.list.compact .where { font-size: 16px; }
 .list .note {                    /* optional detail line under a title */
   display: block;
   margin-top: 6px;
@@ -440,6 +445,8 @@ body.is-case .foot { margin-top: 80px; }
   .list .item { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
   .list .what { font-size: 22px; }
   .list.small .what { font-size: 20px; }
+  .list.compact .what  { font-size: 17px; }
+  .list.compact .where { font-size: 15px; }
   .list .where { font-size: 17px; }
 
   /* Case pages */
