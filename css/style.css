@@ -226,7 +226,7 @@ body.is-case .topnav .home { display: inline; }
   color: var(--text);
 }
 
-/* Experience and Education lists: When | What | Where. */
+/* Experience, Education and Talks lists: When | What | Where. */
 .list ol,
 .list ul { list-style: none; margin: 0; padding: 0; }
 .list .head,
@@ -240,6 +240,54 @@ body.is-case .topnav .home { display: inline; }
 .list .what  { font-size: 26px; font-weight: 300; line-height: 1.25; }
 .list .where { font-size: 19px; color: var(--muted); line-height: 1.35; }
 .list.small .what { font-size: 22px; }
+/* Quieter list (Undervisning og foredrag): smaller text, tighter rows. */
+.list.compact { margin-top: 72px; }
+.list.compact .item  { padding: 10px 0; }
+.list.compact .what  { font-size: 17px; font-weight: 400; color: var(--text); }
+.list.compact .where { font-size: 16px; }
+/* Drawer row: the whole row is a <summary> that opens a detail note.
+ * Uses native <details>, so it works with keyboard and screen readers
+ * without any script. The + turns into × when the drawer is open. */
+.list .item.drawer { display: block; padding: 0; }
+.list .drawer summary {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 520px) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: baseline;
+  position: relative;
+  padding: 16px 40px 16px 0;     /* room for the + on the right */
+  cursor: pointer;
+  list-style: none;
+}
+.list .drawer summary::-webkit-details-marker { display: none; }
+/* The + sits on the right of the title row and stays there when the
+ * drawer opens. Two 1.5px bars, so it rotates into an x around its true
+ * centre. */
+.list .drawer summary::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  background:
+    linear-gradient(var(--fg), var(--fg)) center / 100% 1.5px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) center / 1.5px 100% no-repeat;
+  transition: transform .2s ease;
+}
+.list .drawer details[open] summary::after { transform: rotate(45deg); }
+.list .drawer summary:hover .what,
+.list .drawer summary:focus-visible .what { color: var(--accent); }
+.list .drawer summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.list .drawer .note {
+  max-width: calc(112px + var(--gap) + 520px + 40px);
+  margin: -4px 0 0;
+  padding: 0 40px 20px calc(112px + var(--gap));
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--muted);
+}
 
 
 /* 6. Case pages ---------------------------------------------------------- */
@@ -430,8 +478,12 @@ body.is-case .foot { margin-top: 80px; }
   .list .head { display: block; }
   .list .head span:first-child { display: none; }  /* hide "Når" */
   .list .item { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+  .list .drawer summary { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+  .list .drawer .note { padding-left: 0; }  /* right padding keeps text clear of the x */
   .list .what { font-size: 22px; }
   .list.small .what { font-size: 20px; }
+  .list.compact .what  { font-size: 17px; }
+  .list.compact .where { font-size: 15px; }
   .list .where { font-size: 17px; }
 
   /* Case pages */
