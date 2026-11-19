@@ -248,19 +248,20 @@ body.is-case .topnav .home { display: inline; }
 /* Drawer row: the whole row is a <summary> that opens a detail note.
  * Uses native <details>, so it works with keyboard and screen readers
  * without any script. The + turns into × when the drawer is open. */
-.list .item.drawer { display: block; padding: 0; }
+.list .item.drawer { display: block; padding: 0; position: relative; }
 .list .drawer summary {
   display: grid;
   grid-template-columns: 112px minmax(0, 520px) minmax(0, 1fr);
   column-gap: var(--gap);
   align-items: baseline;
-  position: relative;
   padding: 16px 40px 16px 0;     /* room for the + on the right */
   cursor: pointer;
   list-style: none;
 }
 .list .drawer summary::-webkit-details-marker { display: none; }
-.list .drawer summary::after {    /* + drawn as two 1.5px bars, so it rotates around its true centre */
+/* The + sits on the whole row (summary and open note), centred in its
+ * height. Two 1.5px bars, so it rotates into an x around its true centre. */
+.list .item.drawer::after {
   content: "";
   position: absolute;
   right: 6px;
@@ -271,16 +272,17 @@ body.is-case .topnav .home { display: inline; }
   background:
     linear-gradient(var(--fg), var(--fg)) center / 100% 1.5px no-repeat,
     linear-gradient(var(--fg), var(--fg)) center / 1.5px 100% no-repeat;
+  pointer-events: none;            /* clicks go to the row underneath */
   transition: transform .2s ease;
 }
-.list .drawer details[open] summary::after { transform: rotate(45deg); }
+.list .item.drawer:has(details[open])::after { transform: rotate(45deg); }
 .list .drawer summary:hover .what,
 .list .drawer summary:focus-visible .what { color: var(--accent); }
 .list .drawer summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .list .drawer .note {
-  max-width: calc(112px + var(--gap) + 520px);
+  max-width: calc(112px + var(--gap) + 520px + 40px);
   margin: -4px 0 0;
-  padding: 0 0 20px calc(112px + var(--gap));
+  padding: 0 40px 20px calc(112px + var(--gap));
   font-size: 16px;
   line-height: 1.5;
   color: var(--muted);
@@ -476,7 +478,7 @@ body.is-case .foot { margin-top: 80px; }
   .list .head span:first-child { display: none; }  /* hide "Når" */
   .list .item { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
   .list .drawer summary { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
-  .list .drawer .note { padding-left: 0; }
+  .list .drawer .note { padding-left: 0; }  /* right padding keeps text clear of the x */
   .list .what { font-size: 22px; }
   .list.small .what { font-size: 20px; }
   .list.compact .what  { font-size: 17px; }
