@@ -18,8 +18,8 @@
  * screen recordings for visitors who prefer reduced motion.
  *
  * Visitor statistics: each time a page is shown, it is counted in
- * GoatCounter (loaded in index.html) as "/" for the home page or "/studio",
- * "/aidn", ... for a project. See the stats at marthekobro.goatcounter.com.
+ * Umami (loaded in index.html) as "/" for the home page or "/studio",
+ * "/aidn", ... for a project. See the stats at cloud.umami.is.
  *
  * Note: this file was written with AI assistance (Claude, by Anthropic).
  */
@@ -68,14 +68,16 @@
     else window.scrollTo(0, 0);
   }
 
-  // Counts a page view in GoatCounter. Jumps within the home page
+  // Counts a page view in Umami. Jumps within the home page
   // (#om-meg, #prosjekter) count as the home page, but only once in a row.
   var lastCounted = null;
   function countView(path) {
-    var gc = window.goatcounter;
-    if (path === lastCounted || !gc || !gc.count) return;
+    var umami = window.umami;
+    if (path === lastCounted || !umami || !umami.track) return;
     lastCounted = path;
-    gc.count({ path: path, title: document.title });
+    umami.track(function (props) {
+      return Object.assign({}, props, { url: path, title: document.title });
+    });
   }
 
   var currentPath = "/";
@@ -101,9 +103,9 @@
 
   // The statistics script loads in the background and may arrive after the
   // first page is shown, so count that first page once it is ready.
-  var gcScript = document.querySelector("script[data-goatcounter]");
-  if (gcScript) {
-    gcScript.addEventListener("load", function () {
+  var statsScript = document.querySelector("script[data-website-id]");
+  if (statsScript) {
+    statsScript.addEventListener("load", function () {
       countView(currentPath);
     });
   }

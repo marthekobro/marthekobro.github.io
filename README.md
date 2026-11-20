@@ -98,17 +98,17 @@ open a pull request so the change can be reviewed first.
 
 ## Visitor statistics
 
-Page views are counted with [GoatCounter](https://www.goatcounter.com), a
-small, privacy-friendly service. It sets no cookies and stores no personal
+Page views are counted with [Umami Cloud](https://umami.is), a
+privacy-friendly analytics service. It sets no cookies and stores no personal
 data, so the site needs no cookie banner. Stats are at
-**https://marthekobro.goatcounter.com** (sign in with the GoatCounter
-account).
+**https://cloud.umami.is** (sign in with the Umami account).
 
-- The script tag is in the `<head>` of `index.html`. The address in
-  `data-goatcounter` must match the GoatCounter account's code.
+- The script tag is in the `<head>` of `index.html`. `data-website-id` must
+  be the website ID shown under the site's settings in Umami.
 - `js/main.js` counts each page shown: `/` for the home page and `/studio`,
   `/aidn`, ... for the projects, so each project gets its own number.
-- Visits from `localhost` (local previews) are not counted.
+- `data-domains` limits counting to marthekobro.github.io, so local previews
+  are not counted.
 
 ## Accessibility
 
