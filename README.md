@@ -96,6 +96,20 @@ GitHub Pages serves the `main` branch. Anything merged or pushed to `main`
 is live within a minute or two. For larger changes, work on a branch and
 open a pull request so the change can be reviewed first.
 
+## Visitor statistics
+
+Page views are counted with [GoatCounter](https://www.goatcounter.com), a
+small, privacy-friendly service. It sets no cookies and stores no personal
+data, so the site needs no cookie banner. Stats are at
+**https://marthekobro.goatcounter.com** (sign in with the GoatCounter
+account).
+
+- The script tag is in the `<head>` of `index.html`. The address in
+  `data-goatcounter` must match the GoatCounter account's code.
+- `js/main.js` counts each page shown: `/` for the home page and `/studio`,
+  `/aidn`, ... for the projects, so each project gets its own number.
+- Visits from `localhost` (local previews) are not counted.
+
 ## Accessibility
 
 - Pink accent `#b8336a` has a 5.65:1 contrast ratio on white; secondary
