@@ -442,6 +442,9 @@ body.is-case .topnav .home { display: inline; }
   color: var(--muted);
 }
 body.is-case .foot { margin-top: 80px; }
+.foot .who { display: flex; flex-direction: column; gap: 4px; color: var(--subtle); }
+.foot a { color: var(--muted); font-size: inherit; line-height: inherit; text-decoration: none; }
+.foot a:hover { color: var(--accent); text-decoration: underline; }
 
 
 /* 8. Small screens ------------------------------------------------------- */
