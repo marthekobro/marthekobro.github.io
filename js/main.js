@@ -14,14 +14,15 @@
  * CASES below (in the same order as the index).
  *
  * Further down, a second small block lets visitors drag wide diagrams
- * (.pan boxes) sideways with the mouse or trackpad.
+ * (.pan boxes) sideways with the mouse or trackpad, and a third pauses
+ * screen recordings for visitors who prefer reduced motion.
  *
  * Note: this file was written with AI assistance (Claude, by Anthropic).
  */
 (function () {
   "use strict";
 
-  var CASES = ["studio", "aidn", "forsikring", "aldring-og-helse", "motione", "daman", "postbud"];
+  var CASES = ["deepinsight", "studio", "aidn", "forsikring", "aldring-og-helse", "motione", "daman", "postbud"];
   var SITE_TITLE = "Marthe Trygg Kobro";
   var HOME_TITLE = SITE_TITLE + " – Portefølje";
 
@@ -121,5 +122,22 @@
     }
     box.addEventListener("pointerup", stop);
     box.addEventListener("pointercancel", stop);
+  });
+})();
+
+/*
+ * Screen recordings (video.clip) play muted on a loop. Visitors who have
+ * asked their system for reduced motion get a paused video with controls,
+ * so they can start it themselves.
+ */
+(function () {
+  "use strict";
+
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  document.querySelectorAll("video.clip").forEach(function (clip) {
+    clip.removeAttribute("autoplay");
+    clip.pause();
+    clip.controls = true;
   });
 })();

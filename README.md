@@ -79,6 +79,7 @@ the layout:
 | `tiles`        | Grid of screenshots on grey boxes, two per row         |
 | `scroll`       | Wide diagram that scrolls sideways on small screens    |
 | `pan`          | Very wide diagram shown large, scrolls sideways always |
+| `<video class="clip">` | Muted looping screen recording (MP4), full width  |
 
 ## Preview locally
 
