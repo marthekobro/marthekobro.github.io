@@ -323,6 +323,7 @@ body.is-case .topnav .home { display: inline; }
 }
 .case .hero { margin-top: 48px; }
 .case .hero img { width: 100%; }
+.case .hero .credit { margin-top: 10px; font-size: 13px; color: var(--subtle); }  /* photo credit */
 
 /* Facts (left) and story text (right). */
 .facts { margin-top: 72px; align-items: start; row-gap: 40px; }
@@ -380,6 +381,7 @@ body.is-case .topnav .home { display: inline; }
   gap: var(--gap);
   align-items: start;
 }
+.part .clip { display: block; width: 100%; height: auto; background: var(--well); }  /* screen recording */
 .part .narrow      { max-width: 1000px; }  /* single image, limited width */
 .part .mid         { max-width: 880px; }
 .part .narrowsmall { max-width: 420px; }   /* phone screenshots */
