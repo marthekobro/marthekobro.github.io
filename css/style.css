@@ -386,7 +386,12 @@ body.is-case .topnav .home { display: inline; }
   align-items: start;
 }
 .part .clip { display: block; width: 100%; height: auto; background: var(--well); }  /* screen recording */
-.part .half        { max-width: calc(50% - var(--gap) / 2); }  /* single portrait photo, as wide as one image in a pair */
+.part .trio {                  /* three images side by side */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
 .part .narrow      { max-width: 1000px; }  /* single image, limited width */
 .part .mid         { max-width: 880px; }
 .part .narrowsmall { max-width: 420px; }   /* phone screenshots */
@@ -503,10 +508,10 @@ body.is-case .foot { margin-top: 80px; }
   .facts .story { padding-top: 0; border-top: 0; font-size: 18px; }  /* fewer rules on phones */
   .prose .story { grid-column: 1 / -1; padding-top: 0; border-top: 0; font-size: 18px; }
   .prose { margin-top: 56px; }
-  .part .half { max-width: none; }
   .part { margin-top: 56px; }
   .part .tiles,
-  .part .pair { grid-template-columns: minmax(0, 1fr); }
+  .part .pair,
+  .part .trio { grid-template-columns: minmax(0, 1fr); }
   .part .pan img { height: 520px; }  /* wide diagram: a bit smaller, still readable */
   .pager { grid-template-columns: minmax(0, 1fr); }
   .pager a.next { align-items: flex-start; text-align: left; }
