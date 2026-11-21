@@ -392,6 +392,7 @@ body.is-case .topnav .home { display: inline; }
   gap: var(--gap);
   align-items: start;
 }
+.part .framed      { overflow: hidden; }  /* image with a baked-in background frame */
 .part .narrow      { max-width: 1000px; }  /* single image, limited width */
 .part .mid         { max-width: 880px; }
 .part .narrowsmall { max-width: 420px; }   /* phone screenshots */
@@ -520,6 +521,7 @@ body.is-case .foot { margin-top: 80px; }
 /* Phones: hide the name link in the case-page menu. On narrow screens it
  * wraps onto two lines, and "← Portefølje" below already leads home. */
 @media (max-width: 480px) {
+  .part .framed img { width: 116%; max-width: none; margin-left: -8%; }  /* trim the side frame so the screen gets bigger */
   body.is-case .topnav .home { display: none; }
 }
 
