@@ -479,7 +479,7 @@ body.is-case .foot { margin-top: 80px; }
   .row .nr    { grid-column: 1; grid-row: 1; }
   .row .title { grid-column: 2 / span 2; grid-row: 1; }
   .row .focus { grid-column: 2; grid-row: 2; font-size: 15px; }
-  .row .yr    { grid-column: 3; grid-row: 2; }
+  .row .yr    { grid-column: 3; grid-row: 2; align-self: end; }  /* year sits on the last line when the focus wraps */
 
   /* Home: only the first strip image */
   .strip { grid-template-columns: minmax(0, 1fr); }
