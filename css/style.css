@@ -186,15 +186,25 @@ body.is-case .topnav .home { display: inline; }
 .row .focus { grid-column: span 4; font-size: 16px; color: var(--muted); }
 .row .yr    { grid-column: span 2; font-size: 15px; text-align: right; }
 
-/* Hover: pale pink background that fills the row exactly between its
- * dividers, so the tint lines up with the rules above and below. */
-.row:hover,
-.row:focus-visible { background: var(--tint); }
+/* Hover and keyboard focus share one box: it runs from divider to divider
+ * vertically and bleeds 16px past the text on each side, so the tint and the
+ * focus ring always line up with each other. */
+.row { position: relative; isolation: isolate; }
+.row::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 -16px;
+  border: 2px solid transparent;
+  transition: background-color .15s ease;
+  pointer-events: none;
+}
+.row:hover::before,
+.row:focus-visible::before { background: var(--tint); }
+.row:focus-visible { outline: none; }
+.row:focus-visible::before { border-color: var(--accent); }
 .row:hover .title,
 .row:focus-visible .title { color: var(--accent); }
-/* Keyboard focus: no box around the row; the title is underlined instead. */
-.row:focus-visible { outline: none; }
-.row:focus-visible .title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
 
 /* Three images under the index, each linking to its project. */
 .strip {
@@ -481,6 +491,7 @@ body.is-case .foot { margin-top: 80px; }
   .row .title { grid-column: 2 / span 2; grid-row: 1; }
   .row .focus { grid-column: 2; grid-row: 2; font-size: 15px; }
   .row .yr    { grid-column: 3; grid-row: 2; align-self: end; }  /* year sits on the last line when the focus wraps */
+  .row::before { inset: 0 -10px; }  /* smaller bleed: stays inside the 16px page margin */
 
   /* Home: only the first strip image */
   .strip { grid-template-columns: minmax(0, 1fr); }
