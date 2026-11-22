@@ -186,14 +186,15 @@ body.is-case .topnav .home { display: inline; }
 .row .focus { grid-column: span 4; font-size: 16px; color: var(--muted); }
 .row .yr    { grid-column: span 2; font-size: 15px; text-align: right; }
 
-/* Hover: pale pink background that bleeds 16px past the text on each side. */
+/* Hover: pale pink background that fills the row exactly between its
+ * dividers, so the tint lines up with the rules above and below. */
 .row:hover,
-.row:focus-visible {
-  background: var(--tint);
-  box-shadow: -16px 0 0 var(--tint), 16px 0 0 var(--tint);
-}
+.row:focus-visible { background: var(--tint); }
 .row:hover .title,
 .row:focus-visible .title { color: var(--accent); }
+/* Keyboard focus: no box around the row; the title is underlined instead. */
+.row:focus-visible { outline: none; }
+.row:focus-visible .title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
 
 /* Three images under the index, each linking to its project. */
 .strip {
